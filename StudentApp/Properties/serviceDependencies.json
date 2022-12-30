@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:StudentAppContext"
+    },
+    "secrets1": {
+      "type": "secrets"
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "SqlServerLocalDB",
+      "dynamicId": null
+    },
+    "identityapp1": {
+      "type": "identityapp",
+      "dynamicId": null
+    }
+  }
+}
