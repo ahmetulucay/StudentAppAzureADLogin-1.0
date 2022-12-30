@@ -65,8 +65,6 @@ app.UseSwaggerUI(s =>
     s.OAuthClientId(builder.Configuration["SwaggerAzureAd:ClientId"]);
     s.OAuthUsePkce();
     s.OAuthScopeSeparator(" ");
-    //s.SwaggerEndpoint("/swagger/v1/swagger.json", "Test API");
-    //s.RoutePrefix = "api";
 });
 
 app.UseHttpsRedirection();
