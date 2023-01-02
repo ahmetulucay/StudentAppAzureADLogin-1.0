@@ -16,9 +16,10 @@ Creating Swagger Azure AD Api        =
 --------------------------------------
 Now we are in project/api in Visual Studio/-Code,
 
+- On Connected services/Solution Explorer click right & add Microsoft Identity Platform,
+
 ![ConnectedServices-Microsoft Identity Platform](https://user-images.githubusercontent.com/57094137/210285547-d47ebdbb-f02a-488c-8fec-3328709199b9.jpg)
 
-- On Connected services/Solution Explorer click right & add Microsoft Identity Platform,
 - On the new opened page if you are not login to Azure login/sign in to Azure,
 - On the new opened page after logging in you will see your created App's name as a list,
 - We are still on this page, on the upper right click (+) to create/register application,
