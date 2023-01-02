@@ -2,9 +2,7 @@
 ASP.NET Core 6/7 MVC & EF (Code-First) (HttpGet/Post/Put/Delete) Swagger Azure AD Authentication
 
 ********************************************************
---------------------------------------------------------
 STEPS (Swagger Azure AD Autht - Swagger Azure AD Login)=
---------------------------------------------------------
 ********************************************************
 
 Opening programs                     =
