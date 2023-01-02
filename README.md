@@ -4,6 +4,7 @@ ASP.NET Core 6/7 MVC & EF (Code-First) (HttpGet/Post/Put/Delete) Swagger Azure A
 ********************************************************
 STEPS (Swagger Azure AD Autht - Swagger Azure AD Login)=
 ********************************************************
+![Authorized Page](https://user-images.githubusercontent.com/57094137/210284591-4a4d7eaa-275f-49ea-bf0a-a87bdf80f35f.jpg)
 
 Opening programs                     =
 --------------------------------------
@@ -185,4 +186,5 @@ GO BACK TO Running program, Swagger page=
 - RUN Methods (get/post/put/update/delete)
 - NOW WE HAVE ACCESS TO DATA, GETTING RESPONSE, AND METHODS WORKING  !!!!!  :))
 
+![Got Token](https://user-images.githubusercontent.com/57094137/210284617-5a4dd58f-d2f8-4c34-9fa5-ba21c21aa178.jpg)
 *******************************************************************************
