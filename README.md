@@ -1,7 +1,6 @@
 # How to integrate Azure AD with ASP.NET 7 (2023):
 ASP.NET Core 6/7 MVC & EF (Code-First) (HttpGet/Post/Put/Delete) Swagger Azure AD Authentication
 
-
 ********************************************************
 --------------------------------------------------------
 STEPS (Swagger Azure AD Autht - Swagger Azure AD Login)=
@@ -10,13 +9,13 @@ STEPS (Swagger Azure AD Autht - Swagger Azure AD Login)=
 
 Opening programs                     =
 --------------------------------------
-Open Visual Studio/-Code
+Open Visual Studio/-Code. 
 After that Open your project/api (Exp.=StudentApp)
 
 
 Creating Swagger Azure AD Api        =
 --------------------------------------
-Now we are in project/api,
+Now we are in project/api in Visual Studio/-Code,
 
 - On Connected services/Solution Explorer click right & add Microsoft Identity Platform,
 - On the new opened page if you are not login to Azure login/sign in to Azure,
