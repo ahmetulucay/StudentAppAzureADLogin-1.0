@@ -16,6 +16,8 @@ Creating Swagger Azure AD Api        =
 --------------------------------------
 Now we are in project/api in Visual Studio/-Code,
 
+![ConnectedServices-Microsoft Identity Platform](https://user-images.githubusercontent.com/57094137/210285547-d47ebdbb-f02a-488c-8fec-3328709199b9.jpg)
+
 - On Connected services/Solution Explorer click right & add Microsoft Identity Platform,
 - On the new opened page if you are not login to Azure login/sign in to Azure,
 - On the new opened page after logging in you will see your created App's name as a list,
@@ -64,6 +66,8 @@ RUN project whether it is working or not =
 Making changes on Program.cs/StudentApp =
 -----------------------------------------
 - go to "builder.Services.AddSwaggerGen();" and add these codes to add OpenApiInfo & OpenApiSecurityScheme:
+
+![AddSwaggerGen](https://user-images.githubusercontent.com/57094137/210285353-71bc8838-238f-4d49-8c1f-901f82e43c4b.jpg)
 
   builder.Services.AddSwaggerGen(
     c=>
