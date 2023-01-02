@@ -4,6 +4,7 @@ ASP.NET Core 6/7 MVC & EF (Code-First) (HttpGet/Post/Put/Delete) Swagger Azure A
 ********************************************************
 STEPS (Swagger Azure AD Autht - Swagger Azure AD Login)=
 ********************************************************
+![Authorized Page](https://user-images.githubusercontent.com/57094137/210284591-4a4d7eaa-275f-49ea-bf0a-a87bdf80f35f.jpg)
 
 Opening programs                     =
 --------------------------------------
@@ -16,6 +17,9 @@ Creating Swagger Azure AD Api        =
 Now we are in project/api in Visual Studio/-Code,
 
 - On Connected services/Solution Explorer click right & add Microsoft Identity Platform,
+
+![ConnectedServices-Microsoft Identity Platform](https://user-images.githubusercontent.com/57094137/210285547-d47ebdbb-f02a-488c-8fec-3328709199b9.jpg)
+
 - On the new opened page if you are not login to Azure login/sign in to Azure,
 - On the new opened page after logging in you will see your created App's name as a list,
 - We are still on this page, on the upper right click (+) to create/register application,
@@ -51,16 +55,20 @@ Making changes on project using data from Azure Portal =
 - this data which are "Application (client) id, Directory (tenant) id etc..." is created automatically 
   when creating SwaggerAzureADApi and uploaded to appsettings.json.
 
+![SwaggerAzureADApi App regs](https://user-images.githubusercontent.com/57094137/210285097-b0dc9055-def3-4d04-a382-feeca68fd0c0.jpg)
 
 RUN project whether it is working or not =
 ------------------------------------------
 - run get method and execute,
 - if you get response as "Status Code 401", it is okay and we need to make some changes in Program.cs.
 
+![Error 401](https://user-images.githubusercontent.com/57094137/210284937-710c53ce-bfda-4620-b65b-b09d291b90a0.jpg)
 
 Making changes on Program.cs/StudentApp =
 -----------------------------------------
 - go to "builder.Services.AddSwaggerGen();" and add these codes to add OpenApiInfo & OpenApiSecurityScheme:
+
+![AddSwaggerGen](https://user-images.githubusercontent.com/57094137/210285353-71bc8838-238f-4d49-8c1f-901f82e43c4b.jpg)
 
   builder.Services.AddSwaggerGen(
     c=>
@@ -118,6 +126,8 @@ Making changes on Azure Portal =
 Making changes on project/StudentApp =
 --------------------------------------
 - go to appsettings.json and add these codes from program.cs following "AzureAd" :
+
+![VS App regs](https://user-images.githubusercontent.com/57094137/210285156-39e8a2ef-de27-4434-a763-d8705256eaf6.jpg)
 
     "AzureAd": {
     "Instance": "https://login.microsoftonline.com/",
@@ -181,8 +191,13 @@ GO BACK TO Running program, Swagger page=
 - on the new opened page Sign in with your account (account logging information in which you created SwaggerAzureADApi)
 - on the new page give permission and click "Accept",
 - now WE GOT TOKEN.
+
+![Got Token](https://user-images.githubusercontent.com/57094137/210284617-5a4dd58f-d2f8-4c34-9fa5-ba21c21aa178.jpg)
+
 - TURN TO running program, swagger page,
 - RUN Methods (get/post/put/update/delete)
 - NOW WE HAVE ACCESS TO DATA, GETTING RESPONSE, AND METHODS WORKING  !!!!!  :))
+
+![Success 200](https://user-images.githubusercontent.com/57094137/210285257-fdc3b299-1be5-4d9f-9274-0072d637664e.jpg)
 
 *******************************************************************************
