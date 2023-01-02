@@ -1,7 +1,6 @@
-# StudentAppAzureADLogin-1.0
+# How to integrate Azure AD with ASP.NET 7 (2023):
 ASP.NET Core 6/7 MVC & EF (Code-First) (HttpGet/Post/Put/Delete) Swagger Azure AD Authentication
 
-# How to integrate Azure AD with ASP.NET 7 - 2023 ?
 
 ********************************************************
 --------------------------------------------------------
