@@ -52,12 +52,14 @@ Making changes on project using data from Azure Portal =
 - this data which are "Application (client) id, Directory (tenant) id etc..." is created automatically 
   when creating SwaggerAzureADApi and uploaded to appsettings.json.
 
+![SwaggerAzureADApi App regs](https://user-images.githubusercontent.com/57094137/210285097-b0dc9055-def3-4d04-a382-feeca68fd0c0.jpg)
 
 RUN project whether it is working or not =
 ------------------------------------------
 - run get method and execute,
 - if you get response as "Status Code 401", it is okay and we need to make some changes in Program.cs.
 
+![Error 401](https://user-images.githubusercontent.com/57094137/210284937-710c53ce-bfda-4620-b65b-b09d291b90a0.jpg)
 
 Making changes on Program.cs/StudentApp =
 -----------------------------------------
@@ -119,6 +121,8 @@ Making changes on Azure Portal =
 Making changes on project/StudentApp =
 --------------------------------------
 - go to appsettings.json and add these codes from program.cs following "AzureAd" :
+
+![VS App regs](https://user-images.githubusercontent.com/57094137/210285156-39e8a2ef-de27-4434-a763-d8705256eaf6.jpg)
 
     "AzureAd": {
     "Instance": "https://login.microsoftonline.com/",
