@@ -186,9 +186,13 @@ GO BACK TO Running program, Swagger page=
 - on the new opened page Sign in with your account (account logging information in which you created SwaggerAzureADApi)
 - on the new page give permission and click "Accept",
 - now WE GOT TOKEN.
+
+![Got Token](https://user-images.githubusercontent.com/57094137/210284617-5a4dd58f-d2f8-4c34-9fa5-ba21c21aa178.jpg)
+
 - TURN TO running program, swagger page,
 - RUN Methods (get/post/put/update/delete)
 - NOW WE HAVE ACCESS TO DATA, GETTING RESPONSE, AND METHODS WORKING  !!!!!  :))
 
-![Got Token](https://user-images.githubusercontent.com/57094137/210284617-5a4dd58f-d2f8-4c34-9fa5-ba21c21aa178.jpg)
+![Success 200](https://user-images.githubusercontent.com/57094137/210285257-fdc3b299-1be5-4d9f-9274-0072d637664e.jpg)
+
 *******************************************************************************
