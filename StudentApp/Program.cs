@@ -18,10 +18,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
+
+#region SecureApi
 builder.Services.AddSwaggerGen(
     c=>
     {
-        c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title ="Swagger Azure AD Demo", Version= "v1" });
+        c.SwaggerDoc("v1", new OpenApiInfo { Title ="Swagger Azure AD Demo", Version= "v1" });
         c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
         {
             Description = "Oauth2.0 which uses AuthorizationCode flow",
@@ -51,6 +53,7 @@ builder.Services.AddSwaggerGen(
             }
         });
     });
+#endregion
 
 // Add interfaces (Context)
 builder.Services.AddTransient<IService, Service>();
@@ -65,8 +68,6 @@ app.UseSwaggerUI(s =>
     s.OAuthClientId(builder.Configuration["SwaggerAzureAd:ClientId"]);
     s.OAuthUsePkce();
     s.OAuthScopeSeparator(" ");
-    //s.SwaggerEndpoint("/swagger/v1/swagger.json", "Test API");
-    //s.RoutePrefix = "api";
 });
 
 app.UseHttpsRedirection();

@@ -27,13 +27,20 @@ namespace StudentApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
+
+                    b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("SecondName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("School")
@@ -42,8 +49,8 @@ namespace StudentApp.Migrations
                     b.Property<string>("TlfNo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("RegistrationDate")
+                        .HasColumnType("datetime");
 
                     b.HasKey("Id");
 
