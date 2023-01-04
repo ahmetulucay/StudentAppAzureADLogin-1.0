@@ -1,4 +1,6 @@
 ﻿
+using StudentApp.Controllers.Validations;
+
 namespace StudentApp.Models
 {
     public class Students
@@ -10,7 +12,7 @@ namespace StudentApp.Models
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
 
-        public string? Address { get; set; }
+        [ValidateNotNullOrEmptyAttribute] public string? Address { get; set; }
         public string? TlfNo { get; set; }
         public string? School { get; set; }
 
