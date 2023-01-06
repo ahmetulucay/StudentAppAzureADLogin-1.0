@@ -34,10 +34,12 @@ public class Repo : IRepo
         {
             result.UserName = students.UserName;
             result.FirstName = students.FirstName;
+            result.SecondName = students.SecondName;
             result.LastName = students.LastName;
             result.TlfNo = students.TlfNo;
             result.School = students.School;
             result.Address = students.Address;
+            result.RegistrationDate= students.RegistrationDate;
 
             _context.Student.Update(result);
             await _context.SaveChangesAsync();
