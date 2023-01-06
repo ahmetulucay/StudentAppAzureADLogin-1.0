@@ -18,6 +18,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
+
+#region SecureApi
 builder.Services.AddSwaggerGen(
     c=>
     {
@@ -51,6 +53,7 @@ builder.Services.AddSwaggerGen(
             }
         });
     });
+#endregion
 
 // Add interfaces (Context)
 builder.Services.AddTransient<IService, Service>();

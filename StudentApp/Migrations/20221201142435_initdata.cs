@@ -18,10 +18,12 @@ namespace StudentApp.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecondName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TlfNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    School = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    School = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RegistrationDate = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
                 constraints: table =>
                 {
