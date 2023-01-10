@@ -1,4 +1,5 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
 
 namespace StudentApp.Models
 {
@@ -7,14 +8,14 @@ namespace StudentApp.Models
         internal int id;
 
         public int Id { get; set; }
-        public string? UserName { get; set; }
-        public string? FirstName { get; set; }
-        public string? SecondName { get; set; }
-        public string? LastName { get; set; }
+        [Required] public string UserName { get; set; }
+        [Required] public string FirstName { get; set; }
+        public string SecondName { get; set; }
+        [Required] public string LastName { get; set; }
 
-        public string? Address { get; set; }
-        public string? TlfNo { get; set; }
-        public string? School { get; set; }
-        public DateTime RegistrationDate { get; internal set; }
+        [Required] public string Address { get; set; }
+        [Required] public string TlfNo { get; set; }
+        [Required] public string School { get; set; }
+        [Required] public DateTime RegistrationDate { get; internal set; }
     }
 }
