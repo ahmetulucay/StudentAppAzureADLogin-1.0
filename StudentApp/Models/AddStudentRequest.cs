@@ -1,4 +1,5 @@
-﻿using StudentApp.Controllers.Validations;
+﻿using System.ComponentModel.DataAnnotations;
+using StudentApp.Controllers.Validations;
 
 namespace StudentApp.Models
 {
@@ -19,15 +20,15 @@ namespace StudentApp.Models
             RegistrationDate = students.RegistrationDate;
         }
 
-        [ValidateNotNullOrEmpty] public string? UserName { get; set; }
-        [ValidateNotNullOrEmpty] public string? FirstName { get; set; }
-        [ValidateNotNullOrEmpty] public string? SecondName { get; set; }
-        [ValidateNotNullOrEmpty] public string? LastName { get; set; }
+        [RequiredAttribute] [IsValid] public string UserName { get; set; }
+        [RequiredAttribute] [IsValid] public string FirstName { get; set; }
+        public string? SecondName { get; set; }
+        [RequiredAttribute] [IsValid] public string LastName { get; set; }
 
-        [ValidateNotNullOrEmpty] public string? Address { get; set; }
-        [ValidateNotNullOrEmpty] public string? TlfNo { get; set; }
-        [ValidateNotNullOrEmpty] public string? School { get; set; }
-        [ValidJoinDate] public DateTime RegistrationDate { get; internal set; }
+        [RequiredAttribute] [IsValid] public string Address { get; set; }
+        [RequiredAttribute] [IsValid] public string TlfNo { get; set; }
+        [RequiredAttribute] [IsValid] public string School { get; set; }
+        [RequiredAttribute] [ValidJoinDate] public DateTime RegistrationDate { get; set; }
 
         public virtual Students ToStudent(AddStudentRequest addStudentRequest)
         {
