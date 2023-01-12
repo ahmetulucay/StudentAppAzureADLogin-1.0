@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using StudentApp.Data;
+using StudentApp.Models;
 
 #nullable disable
 
@@ -27,7 +28,7 @@ namespace StudentApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
+                    b.Property<StudentAddress>("Address")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
