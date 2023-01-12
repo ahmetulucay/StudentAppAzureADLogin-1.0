@@ -15,21 +15,21 @@ public class Repo : IRepo
     }
 
     public Task<List<Students>> Get() => 
-        _context.Student.ToListAsync();
+        _context.Students.ToListAsync();
 
     public async Task<Students> GetAsId(int id) => 
-        await _context.Student.FirstOrDefaultAsync(s => s.Id == id);
+        await _context.Students.FirstOrDefaultAsync(s => s.Id == id);
 
     public async Task<Students> AddStudent(Students students)
     {
-        await _context.Student.AddAsync(students);
+        await _context.Students.AddAsync(students);
         await _context.SaveChangesAsync();
         return students;
     }
 
     public async Task<Students> UpdateStudent(int id, Students students)
     {
-        var result = await _context.Student.FirstOrDefaultAsync(s => s.Id == id);
+        var result = await _context.Students.FirstOrDefaultAsync(s => s.Id == id);
         if (result != null)
         {
             result.UserName = students.UserName;
@@ -41,7 +41,7 @@ public class Repo : IRepo
             result.Address = students.Address;
             result.RegistrationDate= students.RegistrationDate;
 
-            _context.Student.Update(result);
+            _context.Students.Update(result);
             await _context.SaveChangesAsync();
             return result;
         }
@@ -50,14 +50,14 @@ public class Repo : IRepo
 
     public async Task<bool?> DeleteStudent(int id)
     {
-        var result = await _context.Student.FindAsync(id);
+        var result = await _context.Students.FindAsync(id);
         if (result == null)
         {
             return null;
         }
         try
         {
-            _context.Student.Remove(result);
+            _context.Students.Remove(result);
             await _context.SaveChangesAsync();
             return true;
         }
