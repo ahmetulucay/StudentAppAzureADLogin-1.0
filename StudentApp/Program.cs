@@ -1,5 +1,4 @@
 
-
 using Microsoft.EntityFrameworkCore;
 using StudentApp.Data;
 using StudentApp.Repo;
@@ -7,17 +6,27 @@ using StudentApp.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllers();
 builder.Services.AddDbContext<StudentAppContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("StudentAppContext") ?? throw new InvalidOperationException("Connection string 'StudentAppContext' not found.")));
-
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
-// Add services to the container.
+#region AddingServicesToTheContainer
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+        options.JsonSerializerOptions.AllowTrailingCommas = true;
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+    });
+#endregion
 
 #region SecureApi
 builder.Services.AddSwaggerGen(

@@ -23,24 +23,10 @@ namespace StudentApp.Data
             modelBuilder.Entity<Students>()
                 .HasOne(s => s.Address)
                 .WithOne(ad => ad.Students)
-                .HasForeignKey<StudentAddress>(ad => ad.AddressOfStudentId);
+                .HasForeignKey<StudentAddress>(ad => ad.StudentsId);
         }
 
-        public DbSet<Students> Students { get; set; }
-        public DbSet<StudentAddress> StudentAddresses { get; set; }
-
-
-        //public StudentAppContext(DbSet<Students> students, DbSet<StudentAddress> studentAddresses)
-        //{
-        //    Students = students;
-        //    StudentAddresses = studentAddresses;
-        //}
-        //DbContextOptions<StudentAppContext> dbContextOptions { get; set; } 
-
-        ////public studentappcontext()
-        //public studentappcontext(dbcontextoptions<studentappcontext> options)
-        //    : base(options) { }
-        //public dbset<studentapp.models.students> student { get; set; }
-        //public object students { get; set; }
+        public DbSet<Students> Student { get; set; }
+        public DbSet<StudentAddress> StudentAddress { get; set; }
     }
 }
