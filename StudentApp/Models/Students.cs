@@ -6,29 +6,29 @@ namespace StudentApp.Models
     public class Students
     {
         internal int id;
-        private readonly Students students;
+        private readonly Students Student;
 
         public int Id { get; set; }
-        [Required] public string UserName { get; set; }
-        [Required] public string FirstName { get; set; }
+        public string UserName { get; set; }
+        public string FirstName { get; set; }
         public string SecondName { get; set; }
-        [Required] public string LastName { get; set; }
-        [Required] public string TlfNo { get; set; }
-        [Required] public string School { get; set; }
-        [Required] public DateTime RegistrationDate { get; internal set; }
+        public string LastName { get; set; }
+        public string TlfNo { get; set; }
+        public string School { get; set; }
+        public DateTime RegistrationDate { get; internal set; }
 
-        [Required] public StudentAddress Address { get; set; }
+        public StudentAddress Address { get; set; }
     }
 
     public class StudentAddress
     {
-        [Required] public int StudentAddressId { get; set; }
-        [Required] public string address { get; set; }
-        [Required] public string City { get; set; }
-        [Required] public int PostNumber { get; set; }
-        [Required] public string Country { get; set; }
-        [Required] public int AddressOfStudentId { get; set; }
-        [Required] public Students Students { get; set; }
+        public int Id { get; set; }
+        public string Address { get; set; }
+        public string City { get; set; }
+        public int PostNumber { get; set; }
+        public string Country { get; set; }
+        public int StudentsId { get; set; }
+        public Students Students { get; set; }
 
     }
 }

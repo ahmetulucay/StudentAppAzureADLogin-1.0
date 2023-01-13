@@ -1,7 +1,9 @@
 ﻿
+using Microsoft.Azure.Amqp.Framing;
 using Microsoft.EntityFrameworkCore;
 using StudentApp.Data;
 using StudentApp.Models;
+using System.Diagnostics.Metrics;
 
 namespace StudentApp.Repo;
 
@@ -15,21 +17,21 @@ public class Repo : IRepo
     }
 
     public Task<List<Students>> Get() => 
-        _context.Students.ToListAsync();
+        _context.Student.ToListAsync();
 
     public async Task<Students> GetAsId(int id) => 
-        await _context.Students.FirstOrDefaultAsync(s => s.Id == id);
+        await _context.Student.FirstOrDefaultAsync(s => s.Id == id);
 
     public async Task<Students> AddStudent(Students students)
     {
-        await _context.Students.AddAsync(students);
+        await _context.Student.AddAsync(students);
         await _context.SaveChangesAsync();
         return students;
     }
 
     public async Task<Students> UpdateStudent(int id, Students students)
     {
-        var result = await _context.Students.FirstOrDefaultAsync(s => s.Id == id);
+        var result = await _context.Student.FirstOrDefaultAsync(s => s.Id == id);
         if (result != null)
         {
             result.UserName = students.UserName;
@@ -38,10 +40,10 @@ public class Repo : IRepo
             result.LastName = students.LastName;
             result.TlfNo = students.TlfNo;
             result.School = students.School;
-            result.Address = students.Address;
             result.RegistrationDate= students.RegistrationDate;
+            result.Address = students.Address;
 
-            _context.Students.Update(result);
+            _context.Student.Update(result);
             await _context.SaveChangesAsync();
             return result;
         }
@@ -50,14 +52,14 @@ public class Repo : IRepo
 
     public async Task<bool?> DeleteStudent(int id)
     {
-        var result = await _context.Students.FindAsync(id);
+        var result = await _context.Student.FindAsync(id);
         if (result == null)
         {
             return null;
         }
         try
         {
-            _context.Students.Remove(result);
+            _context.Student.Remove(result);
             await _context.SaveChangesAsync();
             return true;
         }
