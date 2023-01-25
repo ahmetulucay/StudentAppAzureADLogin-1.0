@@ -139,23 +139,23 @@ Making changes on project/StudentApp =
   },
   "SwaggerAzureAD": {
     "AuthorizationUrl": "https://login.microsoftonline.com/d5af55b1-09d1-4c62-b91b-d108fd981704/oauth2/v2.0/authorize",  
-              >>>> take this data from "SwaggerClientAppRegistration | Endpoints" (authorization endpoint(v2))
+              >> take this data from "SwaggerClientAppRegistration | Endpoints" (authorization endpoint(v2))
 
     "TokenUrl": "https://login.microsoftonline.com/d5af55b1-09d1-4c62-b91b-d108fd981704/oauth2/v2.0/token",
-              >>>> take this data from "SwaggerClientAppRegistration | Endpoints" (token endpoint(v2))
+              >> take this data from "SwaggerClientAppRegistration | Endpoints" (token endpoint(v2))
 
     "Scope": "api://a3f042ab-660c-4b16-92ee-6c1ea013f75e/access_as_user",
-              >>>> go to "SwaggerClientAppRegistration | API permissions",
-              >>>> click  (+ Add a Permission) on the new page click "My APIs",
-              >>>> click project api name (exp. SwaggerAzureADApi) on the new page click "access_as_user",
-              >>>> on the same page click (Add permissions)
-              >>>> we are again on the "SwaggerClientAppRegistration | API permissions" page,
-              >>>> click "access_as_user" and on the new page copy data "api://......................."
-              >>>> paste this data to "Scope".
+              >> go to "SwaggerClientAppRegistration | API permissions",
+              >> click  (+ Add a Permission) on the new page click "My APIs",
+              >> click project api name (exp. SwaggerAzureADApi) on the new page click "access_as_user",
+              >> on the same page click (Add permissions)
+              >> we are again on the "SwaggerClientAppRegistration | API permissions" page,
+              >> click "access_as_user" and on the new page copy data "api://......................."
+              >> paste this data to "Scope".
               
 
     "ClientId": "e6e468b6-e2bd-405f-8808-40aef44b49da"                  
-              >>>> take this data from "SwaggerClientAppRegistration | Overview" section (Application (client) ID)
+              >> take this data from "SwaggerClientAppRegistration | Overview" section (Application (client) ID)
 
     }
 
@@ -178,7 +178,7 @@ Making changes on Azure Portal =
 - click (+ Add a platform)
 - on the new page click ("Single-page application"),
 - on the new opened page click ("Access tokens" and "ID tokens") but don't save because we need "Redirect URIs",
-- so NOW, RUN program from Visual Studio/-code, !!!
+- NOW, RUN program from Visual Studio/-code, !!!
   and on the opened page copy the url (exp."https://localhost:7019/swagger")
 - and paste it to "Redirect URIs" as (exp."https://localhost:7019/swagger/oauth2-redirect.html"),
 - now you can click save/configure "Configure single-page application". Dont close RUNNING program. !!!
