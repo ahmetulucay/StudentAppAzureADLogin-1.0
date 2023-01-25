@@ -56,6 +56,52 @@ namespace StudentApp.Migrations
                     b.ToTable("StudentAddress");
                 });
 
+            modelBuilder.Entity("StudentApp.Models.StudentEmailAddress", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("EmailAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentsId")
+                        .IsUnique();
+
+                    b.ToTable("StudentEmailAddress");
+                });
+
+            modelBuilder.Entity("StudentApp.Models.StudentPhoneNo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("PhoneNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentsId")
+                        .IsUnique();
+
+                    b.ToTable("StudentPhoneNo");
+                });
+
             modelBuilder.Entity("StudentApp.Models.Students", b =>
                 {
                     b.Property<int>("Id")
@@ -83,10 +129,6 @@ namespace StudentApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TlfNo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -107,9 +149,37 @@ namespace StudentApp.Migrations
                     b.Navigation("Students");
                 });
 
+            modelBuilder.Entity("StudentApp.Models.StudentEmailAddress", b =>
+                {
+                    b.HasOne("StudentApp.Models.Students", "Students")
+                        .WithOne("EmailAddressStudent")
+                        .HasForeignKey("StudentApp.Models.StudentEmailAddress", "StudentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("StudentApp.Models.StudentPhoneNo", b =>
+                {
+                    b.HasOne("StudentApp.Models.Students", "Students")
+                        .WithOne("PhoneStudent")
+                        .HasForeignKey("StudentApp.Models.StudentPhoneNo", "StudentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Students");
+                });
+
             modelBuilder.Entity("StudentApp.Models.Students", b =>
                 {
                     b.Navigation("AddressStudent")
+                        .IsRequired();
+
+                    b.Navigation("EmailAddressStudent")
+                        .IsRequired();
+
+                    b.Navigation("PhoneStudent")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

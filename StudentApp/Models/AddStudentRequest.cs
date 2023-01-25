@@ -14,20 +14,22 @@ namespace StudentApp.Models
             FirstName= students.FirstName;
             SecondName = students.SecondName;
             LastName= students.LastName;   
-            TlfNo= students.TlfNo; 
             School= students.School;
             RegistrationDate = students.RegistrationDate;
-            addressStudent = new AddressStudentRequest(students.AddressStudent);
+            PhoneStudent = new PhoneStudentRequest(students.PhoneStudent);
+            EmailAddressStudent = new EmailAddressStudentRequest(students.EmailAddressStudent);
+            AddressStudent = new AddressStudentRequest(students.AddressStudent);
         }
 
         [IsNotNullOrEmpty] public string UserName { get; set; }
         [IsNotNullOrEmpty] public string FirstName { get; set; }
         public string SecondName { get; set; }
         [IsNotNullOrEmpty] public string LastName { get; set; }
-        [IsNotNullOrEmpty] public string TlfNo { get; set; }
         [IsNotNullOrEmpty] public string School { get; set; }
         [ValidateAddJoinDate] public DateTime RegistrationDate { get; set; }
-        [IsNotNullOrEmpty] public AddressStudentRequest addressStudent { get; set; }
+        [IsNotNullOrEmpty] public PhoneStudentRequest PhoneStudent { get; set; }
+        [IsNotNullOrEmpty] public EmailAddressStudentRequest EmailAddressStudent { get; set; }
+        [IsNotNullOrEmpty] public AddressStudentRequest AddressStudent { get; set; }
 
         public virtual Students ToStudent(AddStudentRequest addStudentRequest)
         {
@@ -37,10 +39,11 @@ namespace StudentApp.Models
                 FirstName = addStudentRequest.FirstName,
                 SecondName = addStudentRequest.SecondName,
                 LastName = addStudentRequest.LastName,
-                TlfNo = addStudentRequest.TlfNo,
                 School = addStudentRequest.School,
                 RegistrationDate = addStudentRequest.RegistrationDate,
-                AddressStudent = new AddressStudentRequest().ToAddressStudent(addStudentRequest.addressStudent)
+                PhoneStudent = new PhoneStudentRequest().ToPhoneStudent(addStudentRequest.PhoneStudent),
+                EmailAddressStudent = new EmailAddressStudentRequest().ToEmailStudent(addStudentRequest.EmailAddressStudent),
+                AddressStudent = new AddressStudentRequest().ToAddressStudent(addStudentRequest.AddressStudent)
             };
         }
     }

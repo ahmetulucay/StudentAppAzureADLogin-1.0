@@ -15,10 +15,10 @@ public class Repo : IRepo
     }
 
     public async Task<List<Students>> Get() =>
-        await _context.Student.Include(s => s.AddressStudent).ToListAsync();
+        await _context.Student.Include(s => s.PhoneStudent).Include(s => s.EmailAddressStudent).Include(s => s.AddressStudent).ToListAsync();
 
     public async Task<Students> GetAsId(int id) =>
-        await _context.Student.Include(s => s.AddressStudent).FirstOrDefaultAsync(s => s.Id == id);
+        await _context.Student.Include(s => s.PhoneStudent).Include(s => s.EmailAddressStudent).Include(s => s.AddressStudent).FirstOrDefaultAsync(s => s.Id == id);
 
     public async Task<Students> AddStudent(Students students)
     {
@@ -29,16 +29,17 @@ public class Repo : IRepo
 
     public async Task<Students> UpdateStudent(int id, Students students)
     {
-        var result = await _context.Student.Include(s => s.AddressStudent).FirstOrDefaultAsync(s => s.Id == id);
+        var result = await _context.Student.Include(s => s.PhoneStudent).Include(s => s.EmailAddressStudent).Include(s => s.AddressStudent).FirstOrDefaultAsync(s => s.Id == id);
         if (result != null)
         {
             result.UserName = students.UserName;
             result.FirstName = students.FirstName;
             result.SecondName = students.SecondName;
             result.LastName = students.LastName;
-            result.TlfNo = students.TlfNo;
             result.School = students.School;
             result.RegistrationDate= students.RegistrationDate;
+            result.PhoneStudent = students.PhoneStudent;
+            result.EmailAddressStudent= students.EmailAddressStudent;
             result.AddressStudent = students.AddressStudent;
 
             _context.Student.Update(result);
