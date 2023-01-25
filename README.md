@@ -184,8 +184,8 @@ Making changes on Azure Portal =
 - now you can click save/configure "Configure single-page application". Dont close RUNNING program. !!!
 
 
-GO BACK TO Running program, Swagger page=
-----------------------------------------
+BACK TO Running program, Swagger page=
+--------------------------------------
 - Click ("Authorize") button,
 - on the new page click data ("api://...................") under "Scopes" and then click "Authorize" button.
 - on the new opened page Sign in with your account (account logging information in which you created SwaggerAzureADApi)
