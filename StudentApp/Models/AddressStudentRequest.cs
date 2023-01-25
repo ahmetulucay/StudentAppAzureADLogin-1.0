@@ -8,12 +8,12 @@ namespace StudentApp.Models
         public AddressStudentRequest()
         {
         }
-        public AddressStudentRequest(Students students)
+        public AddressStudentRequest(StudentAddress studentAddress)
         {
-            Address = students.Address.Address;
-            City = students.Address.City;
-            PostNumber = students.Address.PostNumber;
-            Country= students.Address.Country;
+            Address = studentAddress.Address;
+            City = studentAddress.City;
+            PostNumber = studentAddress.PostNumber;
+            Country= studentAddress.Country;
         }
 
         [IsNotNullOrEmpty] public string Address{ get; set; }
@@ -21,17 +21,14 @@ namespace StudentApp.Models
         [IsNotNullOrEmpty] public int PostNumber { get; set; }
         [IsNotNullOrEmpty] public string Country { get; set; }
 
-        public virtual Students AddressStudent(AddressStudentRequest addressStudentRequest)
+        public virtual StudentAddress ToAddressStudent(AddressStudentRequest addressStudentRequest)
         {
-            return new Students
+            return new StudentAddress
             {
-                Address = new StudentAddress
-                {
                     Address= addressStudentRequest.Address,
                     City = addressStudentRequest.City,
                     PostNumber = addressStudentRequest.PostNumber,
                     Country = addressStudentRequest.Country
-                }
             };
         }
     }

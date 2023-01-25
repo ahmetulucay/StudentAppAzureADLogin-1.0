@@ -16,10 +16,7 @@ namespace StudentApp.Models
             TlfNo = students.TlfNo;
             School = students.School;
             RegistrationDate = students.RegistrationDate;
-            Address = students.Address.Address;
-            City = students.Address.City;
-            PostNumber = students.Address.PostNumber;
-            Country = students.Address.Country;
+            addressStudent = new AddressStudentRequest(students.AddressStudent);
         }
 
         [IsNotNullOrEmpty] public string UserName { get; set; }
@@ -28,14 +25,11 @@ namespace StudentApp.Models
         [IsNotNullOrEmpty] public string LastName { get; set; }
         [IsNotNullOrEmpty] public string TlfNo { get; set; }
         [IsNotNullOrEmpty] public string School { get; set; }
-        [ValidateAddJoinDate] public DateTime RegistrationDate { get; set; }
-        [IsNotNullOrEmpty] public string Address { get; set; }
-        [IsNotNullOrEmpty] public string City { get; set; }
-        [IsNotNullOrEmpty] public int PostNumber { get; set; }
-        [IsNotNullOrEmpty] public string Country { get; set; }
+        [ValidateUpdateJoinDate] public DateTime RegistrationDate { get; set; }
+        [IsNotNullOrEmpty] public AddressStudentRequest addressStudent { get; set; }
 
 
-        public virtual Students UpdateStudent(UpdateStudentRequest updateStudentRequest)
+        public virtual Students ToUpdateStudent(UpdateStudentRequest updateStudentRequest)
         {
             return new Students
             {
@@ -46,13 +40,7 @@ namespace StudentApp.Models
                 TlfNo = updateStudentRequest.TlfNo,
                 School = updateStudentRequest.School,
                 RegistrationDate = updateStudentRequest.RegistrationDate,
-                Address = new StudentAddress
-                {
-                    Address = updateStudentRequest.Address,
-                    City = updateStudentRequest.City,
-                    PostNumber = updateStudentRequest.PostNumber,
-                    Country = updateStudentRequest.Country
-                }
+                AddressStudent = new AddressStudentRequest().ToAddressStudent(updateStudentRequest.addressStudent)
             };
         }
     }

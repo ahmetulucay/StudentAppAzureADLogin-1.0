@@ -1,13 +1,10 @@
 ﻿
-using System.ComponentModel.DataAnnotations;
+using Nest;
 
 namespace StudentApp.Models
 {
     public class Students
     {
-        internal int id;
-        private readonly Students Student;
-
         public int Id { get; set; }
         public string UserName { get; set; }
         public string FirstName { get; set; }
@@ -17,7 +14,7 @@ namespace StudentApp.Models
         public string School { get; set; }
         public DateTime RegistrationDate { get; internal set; }
 
-        public StudentAddress Address { get; set; }
+        public StudentAddress AddressStudent { get; set; }
     }
 
     public class StudentAddress
@@ -29,6 +26,5 @@ namespace StudentApp.Models
         public string Country { get; set; }
         public int StudentsId { get; set; }
         public Students Students { get; set; }
-
     }
 }

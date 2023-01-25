@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentApp.Data;
 
@@ -11,9 +12,11 @@ using StudentApp.Data;
 namespace StudentApp.Migrations
 {
     [DbContext(typeof(StudentAppContext))]
-    partial class StudentAppContextModelSnapshot : ModelSnapshot
+    [Migration("20230116125527_StudentAppMigration")]
+    partial class StudentAppMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,9 +63,9 @@ namespace StudentApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0)
-                        .HasColumnName("id");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -99,7 +102,7 @@ namespace StudentApp.Migrations
             modelBuilder.Entity("StudentApp.Models.StudentAddress", b =>
                 {
                     b.HasOne("StudentApp.Models.Students", "Students")
-                        .WithOne("AddressStudent")
+                        .WithOne("Address")
                         .HasForeignKey("StudentApp.Models.StudentAddress", "StudentsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -109,7 +112,7 @@ namespace StudentApp.Migrations
 
             modelBuilder.Entity("StudentApp.Models.Students", b =>
                 {
-                    b.Navigation("AddressStudent")
+                    b.Navigation("Address")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

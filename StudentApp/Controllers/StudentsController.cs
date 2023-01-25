@@ -21,41 +21,46 @@ public class StudentsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<Students>> GetStudent()
+    public async Task<ActionResult<List<StudentResponse>>> GetStudent()
     {
+        var students = new List<StudentResponse>();
         var result = await _service.Get();
-        return Ok(result);
+        if (result is null)  return Ok(students);
+        for (var i = 0; i < result.Count;i++)
+        {
+            students.Add(new StudentResponse(result[i]));
+        }
+        return Ok(students);
     }
 
     [HttpGet("GetAsId/")]
-    public async Task<ActionResult<Students>> GetAsId(int id)
+    public async Task<ActionResult<StudentResponse>> GetAsId(int id)
     {
         var result = await _service.GetAsId(id);
-        if (result == null)
-            return NotFound($"Wrong Id {id}");
-        return Ok(result);
+        if (result == null) return NotFound($"Wrong Id {id}");
+        return Ok(new StudentResponse(result));
     }
 
     [HttpPost]
-    public async Task<ActionResult<AddStudentRequest>> AddStudent(AddStudentRequest addStudentRequest)
+    public async Task<ActionResult<StudentResponse>> AddStudent(AddStudentRequest addStudentRequest)
     {
         var request = new AddStudentRequest();
         var student = request.ToStudent(addStudentRequest);
         var result = await _service.AddStudent(student);
-        return Ok(new AddStudentRequest(result));
+        return Ok(new StudentResponse(result));
     }
 
     [HttpPut]
     [Route("{id}")]
-    public async Task<ActionResult<UpdateStudentRequest>> UpdateStudent(int id, UpdateStudentRequest updateStudentRequest)
+    public async Task<ActionResult<StudentResponse>> UpdateStudent(int id, UpdateStudentRequest updateStudentRequest)
     {
         var request = new UpdateStudentRequest();
-        var student = request.UpdateStudent(updateStudentRequest);
+        var student = request.ToUpdateStudent(updateStudentRequest);
         var result = await _service.UpdateStudent(id, student);
 
         if (result == null)
             return NotFound($"Wrong Id {id}");
-        return Ok(new UpdateStudentRequest(result));
+        return Ok(new StudentResponse(result));
     }
 
     [HttpDelete]

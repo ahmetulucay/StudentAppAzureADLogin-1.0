@@ -1,4 +1,4 @@
-
+#region using
 using Microsoft.EntityFrameworkCore;
 using StudentApp.Data;
 using StudentApp.Repo;
@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
+#endregion
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
