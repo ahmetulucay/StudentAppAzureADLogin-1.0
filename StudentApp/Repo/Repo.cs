@@ -1,9 +1,7 @@
 ﻿
-using Microsoft.Azure.Amqp.Framing;
 using Microsoft.EntityFrameworkCore;
 using StudentApp.Data;
 using StudentApp.Models;
-using System.Diagnostics.Metrics;
 
 namespace StudentApp.Repo;
 
@@ -16,11 +14,11 @@ public class Repo : IRepo
         _context = context;
     }
 
-    public Task<List<Students>> Get() => 
-        _context.Student.ToListAsync();
+    public async Task<List<Students>> Get() =>
+        await _context.Student.Include(s => s.AddressStudent).ToListAsync();
 
-    public async Task<Students> GetAsId(int id) => 
-        await _context.Student.FirstOrDefaultAsync(s => s.Id == id);
+    public async Task<Students> GetAsId(int id) =>
+        await _context.Student.Include(s => s.AddressStudent).FirstOrDefaultAsync(s => s.Id == id);
 
     public async Task<Students> AddStudent(Students students)
     {
@@ -41,7 +39,7 @@ public class Repo : IRepo
             result.TlfNo = students.TlfNo;
             result.School = students.School;
             result.RegistrationDate= students.RegistrationDate;
-            result.Address = students.Address;
+            result.AddressStudent = students.AddressStudent;
 
             _context.Student.Update(result);
             await _context.SaveChangesAsync();
@@ -63,17 +61,9 @@ public class Repo : IRepo
             await _context.SaveChangesAsync();
             return true;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return false;
         }
     }
 }
-
-
-
-
-
-
-
-
