@@ -57,7 +57,7 @@ Making changes on project using data from Azure Portal =
 
 ![SwaggerAzureADApi App regs](https://user-images.githubusercontent.com/57094137/210285097-b0dc9055-def3-4d04-a382-feeca68fd0c0.jpg)
 
-RUN project whether it is working or not =
+RUN project to check it is working or not =
 ------------------------------------------
 - run get method and execute,
 - if you get response as "Status Code 401", it is okay and we need to make some changes in Program.cs.
