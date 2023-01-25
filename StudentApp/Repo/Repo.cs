@@ -29,7 +29,7 @@ public class Repo : IRepo
 
     public async Task<Students> UpdateStudent(int id, Students students)
     {
-        var result = await _context.Student.FirstOrDefaultAsync(s => s.Id == id);
+        var result = await _context.Student.Include(s => s.AddressStudent).FirstOrDefaultAsync(s => s.Id == id);
         if (result != null)
         {
             result.UserName = students.UserName;
