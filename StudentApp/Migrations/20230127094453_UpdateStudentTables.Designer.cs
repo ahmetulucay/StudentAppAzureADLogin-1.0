@@ -12,8 +12,8 @@ using StudentApp.Data;
 namespace StudentApp.Migrations
 {
     [DbContext(typeof(StudentAppContext))]
-    [Migration("20230116125527_StudentAppMigration")]
-    partial class StudentAppMigration
+    [Migration("20230127094453_UpdateStudentTables")]
+    partial class UpdateStudentTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,11 @@ namespace StudentApp.Migrations
 
             modelBuilder.Entity("StudentApp.Models.StudentAddress", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("AddressId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AddressId"));
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -51,21 +51,64 @@ namespace StudentApp.Migrations
                     b.Property<int>("StudentsId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("AddressId");
 
-                    b.HasIndex("StudentsId")
-                        .IsUnique();
+                    b.HasIndex("StudentsId");
 
                     b.ToTable("StudentAddress");
                 });
 
-            modelBuilder.Entity("StudentApp.Models.Students", b =>
+            modelBuilder.Entity("StudentApp.Models.StudentEmailAddress", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("EmailId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmailId"));
+
+                    b.Property<string>("EmailAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EmailId");
+
+                    b.HasIndex("StudentsId");
+
+                    b.ToTable("StudentEmailAddress");
+                });
+
+            modelBuilder.Entity("StudentApp.Models.StudentPhoneNo", b =>
+                {
+                    b.Property<int>("PhoneId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PhoneId"));
+
+                    b.Property<string>("PhoneNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PhoneId");
+
+                    b.HasIndex("StudentsId");
+
+                    b.ToTable("StudentPhoneNo");
+                });
+
+            modelBuilder.Entity("StudentApp.Models.Students", b =>
+                {
+                    b.Property<int>("StudentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentId"));
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -86,15 +129,11 @@ namespace StudentApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TlfNo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("StudentId");
 
                     b.ToTable("Student");
                 });
@@ -102,8 +141,30 @@ namespace StudentApp.Migrations
             modelBuilder.Entity("StudentApp.Models.StudentAddress", b =>
                 {
                     b.HasOne("StudentApp.Models.Students", "Students")
-                        .WithOne("Address")
-                        .HasForeignKey("StudentApp.Models.StudentAddress", "StudentsId")
+                        .WithMany("AddressStudent")
+                        .HasForeignKey("StudentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("StudentApp.Models.StudentEmailAddress", b =>
+                {
+                    b.HasOne("StudentApp.Models.Students", "Students")
+                        .WithMany("EmailAddressStudent")
+                        .HasForeignKey("StudentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("StudentApp.Models.StudentPhoneNo", b =>
+                {
+                    b.HasOne("StudentApp.Models.Students", "Students")
+                        .WithMany("PhoneStudent")
+                        .HasForeignKey("StudentsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -112,8 +173,11 @@ namespace StudentApp.Migrations
 
             modelBuilder.Entity("StudentApp.Models.Students", b =>
                 {
-                    b.Navigation("Address")
-                        .IsRequired();
+                    b.Navigation("AddressStudent");
+
+                    b.Navigation("EmailAddressStudent");
+
+                    b.Navigation("PhoneStudent");
                 });
 #pragma warning restore 612, 618
         }

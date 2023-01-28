@@ -8,6 +8,7 @@ namespace StudentApp.Repo;
 public class Repo : IRepo
 {
     private readonly StudentAppContext _context;
+ 
 
     public Repo(StudentAppContext context)
     {
@@ -18,7 +19,7 @@ public class Repo : IRepo
         await _context.Student.Include(s => s.PhoneStudent).Include(s => s.EmailAddressStudent).Include(s => s.AddressStudent).ToListAsync();
 
     public async Task<Students> GetAsId(int id) =>
-        await _context.Student.Include(s => s.PhoneStudent).Include(s => s.EmailAddressStudent).Include(s => s.AddressStudent).FirstOrDefaultAsync(s => s.Id == id);
+        await _context.Student.Include(s => s.PhoneStudent).Include(s => s.EmailAddressStudent).Include(s => s.AddressStudent).FirstOrDefaultAsync(s => s.StudentId == id);
 
     public async Task<Students> AddStudent(Students students)
     {
@@ -29,7 +30,7 @@ public class Repo : IRepo
 
     public async Task<Students> UpdateStudent(int id, Students students)
     {
-        var result = await _context.Student.Include(s => s.PhoneStudent).Include(s => s.EmailAddressStudent).Include(s => s.AddressStudent).FirstOrDefaultAsync(s => s.Id == id);
+        var result = await _context.Student.Include(s => s.PhoneStudent).Include(s => s.EmailAddressStudent).Include(s => s.AddressStudent).FirstOrDefaultAsync(s => s.StudentId == id);
         if (result != null)
         {
             result.UserName = students.UserName;

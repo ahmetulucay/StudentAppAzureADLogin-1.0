@@ -41,9 +41,9 @@ namespace StudentApp.Models
                 LastName = addStudentRequest.LastName,
                 School = addStudentRequest.School,
                 RegistrationDate = addStudentRequest.RegistrationDate,
-                PhoneStudent = new PhoneStudentRequest().ToPhoneStudent(addStudentRequest.PhoneStudent),
-                EmailAddressStudent = new EmailAddressStudentRequest().ToEmailStudent(addStudentRequest.EmailAddressStudent),
-                AddressStudent = new AddressStudentRequest().ToAddressStudent(addStudentRequest.AddressStudent)
+                PhoneStudent = (ICollection<StudentPhoneNo>)new PhoneStudentRequest().ToPhoneStudent(addStudentRequest.PhoneStudent),
+                EmailAddressStudent = (ICollection<StudentEmailAddress>)new EmailAddressStudentRequest().ToEmailStudent(addStudentRequest.EmailAddressStudent),
+                AddressStudent = (ICollection<StudentAddress>)new AddressStudentRequest().ToAddressStudent(addStudentRequest.AddressStudent)
             };
         }
     }

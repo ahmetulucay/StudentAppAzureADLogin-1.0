@@ -8,6 +8,10 @@ namespace StudentApp.Models
         public AddressStudentRequest()
         {
         }
+
+        public AddressStudentRequest(ICollection<StudentAddress> addressStudent) 
+        {
+        }
         public AddressStudentRequest(StudentAddress studentAddress)
         {
             Address = studentAddress.Address;

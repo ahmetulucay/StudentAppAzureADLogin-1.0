@@ -42,25 +42,25 @@ public class StudentsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<StudentResponse>> AddStudent(AddStudentRequest addStudentRequest)
+    public async Task<ICollection<StudentResponse>> AddStudent(AddStudentRequest addStudentRequest)
     {
         var request = new AddStudentRequest();
         var student = request.ToStudent(addStudentRequest);
         var result = await _service.AddStudent(student);
-        return Ok(new StudentResponse(result));
+        return (ICollection<StudentResponse>)Ok(new StudentResponse(result));
     }
 
     [HttpPut]
     [Route("{id}")]
-    public async Task<ActionResult<StudentResponse>> UpdateStudent(int id, UpdateStudentRequest updateStudentRequest)
+    public async Task<ICollection<StudentResponse>> UpdateStudent(int id, UpdateStudentRequest updateStudentRequest)
     {
         var request = new UpdateStudentRequest();
         var student = request.ToUpdateStudent(updateStudentRequest);
         var result = await _service.UpdateStudent(id, student);
 
         if (result == null)
-            return NotFound($"Wrong Id {id}");
-        return Ok(new StudentResponse(result));
+            return (ICollection<StudentResponse>)NotFound($"Wrong Id {id}");
+        return (ICollection<StudentResponse>)Ok(new StudentResponse(result));
     }
 
     [HttpDelete]

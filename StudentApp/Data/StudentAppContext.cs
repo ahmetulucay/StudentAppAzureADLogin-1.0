@@ -13,20 +13,35 @@ namespace StudentApp.Data
             : base(options)
         {
         }
-        public DbSet<Students> Student { get; set; }
-        public DbSet<StudentAddress> StudentAddress { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=StudentApp.Data;Trusted_Connection=True");
         }
-
+        public DbSet<Students> Student { get; set; }
+        public DbSet<StudentPhoneNo> StudentPhoneNo { get; set; }
+        public DbSet<StudentEmailAddress> StudentEmailAddress { get; set; }
+        public DbSet<StudentAddress> StudentAddress { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Students>()
-                .Property(s => s.Id)
-                .HasColumnName("id")
-                .HasDefaultValue(0)
-                .IsRequired();
+            {
+                modelBuilder.Entity<StudentPhoneNo>()
+                            .HasOne(e => e.Students)
+                            .WithMany(d => d.PhoneStudent)
+                            .HasForeignKey(e => e.StudentsId)
+                            .IsRequired(false);
+
+                modelBuilder.Entity<StudentEmailAddress>()
+                            .HasOne(e => e.Students)
+                            .WithMany(d => d.EmailAddressStudent)
+                            .HasForeignKey(e => e.StudentsId)
+                            .IsRequired(false);
+
+                modelBuilder.Entity<StudentAddress>()
+                            .HasOne(e => e.Students)
+                            .WithMany(d => d.AddressStudent)
+                            .HasForeignKey(e => e.StudentsId)
+                            .IsRequired(false);
+            }
         }
     }
 }
