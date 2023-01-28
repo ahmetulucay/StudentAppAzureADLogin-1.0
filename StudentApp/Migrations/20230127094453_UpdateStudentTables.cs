@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace StudentApp.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateStudentsAddressTables : Migration
+    public partial class UpdateStudentTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,7 +15,8 @@ namespace StudentApp.Migrations
                 name: "Student",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    StudentId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SecondName = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -25,14 +26,14 @@ namespace StudentApp.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Student", x => x.id);
+                    table.PrimaryKey("PK_Student", x => x.StudentId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "StudentAddress",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    AddressId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -42,12 +43,12 @@ namespace StudentApp.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StudentAddress", x => x.Id);
+                    table.PrimaryKey("PK_StudentAddress", x => x.AddressId);
                     table.ForeignKey(
                         name: "FK_StudentAddress_Student_StudentsId",
                         column: x => x.StudentsId,
                         principalTable: "Student",
-                        principalColumn: "id",
+                        principalColumn: "StudentId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -55,19 +56,19 @@ namespace StudentApp.Migrations
                 name: "StudentEmailAddress",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    EmailId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StudentsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StudentEmailAddress", x => x.Id);
+                    table.PrimaryKey("PK_StudentEmailAddress", x => x.EmailId);
                     table.ForeignKey(
                         name: "FK_StudentEmailAddress_Student_StudentsId",
                         column: x => x.StudentsId,
                         principalTable: "Student",
-                        principalColumn: "id",
+                        principalColumn: "StudentId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -75,39 +76,36 @@ namespace StudentApp.Migrations
                 name: "StudentPhoneNo",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    PhoneId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PhoneNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StudentsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StudentPhoneNo", x => x.Id);
+                    table.PrimaryKey("PK_StudentPhoneNo", x => x.PhoneId);
                     table.ForeignKey(
                         name: "FK_StudentPhoneNo_Student_StudentsId",
                         column: x => x.StudentsId,
                         principalTable: "Student",
-                        principalColumn: "id",
+                        principalColumn: "StudentId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_StudentAddress_StudentsId",
                 table: "StudentAddress",
-                column: "StudentsId",
-                unique: true);
+                column: "StudentsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StudentEmailAddress_StudentsId",
                 table: "StudentEmailAddress",
-                column: "StudentsId",
-                unique: true);
+                column: "StudentsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StudentPhoneNo_StudentsId",
                 table: "StudentPhoneNo",
-                column: "StudentsId",
-                unique: true);
+                column: "StudentsId");
         }
 
         /// <inheritdoc />

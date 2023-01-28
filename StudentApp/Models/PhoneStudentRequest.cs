@@ -8,11 +8,15 @@ namespace StudentApp.Models
         public PhoneStudentRequest()
         {
         }
+
+        public PhoneStudentRequest(ICollection<StudentPhoneNo> phoneStudent) 
+        { 
+        }
         public PhoneStudentRequest(StudentPhoneNo studentPhone)
         {
             PhoneNo = studentPhone.PhoneNo;
         }
-        [IsNotNullOrEmpty] public string PhoneNo { get; private set; }
+        [IsNotNullOrEmpty] public string PhoneNo { get; set; }
 
         public virtual StudentPhoneNo ToPhoneStudent(PhoneStudentRequest phoneStudentRequest)
         {

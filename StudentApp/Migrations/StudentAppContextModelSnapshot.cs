@@ -24,11 +24,11 @@ namespace StudentApp.Migrations
 
             modelBuilder.Entity("StudentApp.Models.StudentAddress", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("AddressId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AddressId"));
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -48,21 +48,20 @@ namespace StudentApp.Migrations
                     b.Property<int>("StudentsId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("AddressId");
 
-                    b.HasIndex("StudentsId")
-                        .IsUnique();
+                    b.HasIndex("StudentsId");
 
                     b.ToTable("StudentAddress");
                 });
 
             modelBuilder.Entity("StudentApp.Models.StudentEmailAddress", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("EmailId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmailId"));
 
                     b.Property<string>("EmailAddress")
                         .IsRequired()
@@ -71,21 +70,20 @@ namespace StudentApp.Migrations
                     b.Property<int>("StudentsId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("EmailId");
 
-                    b.HasIndex("StudentsId")
-                        .IsUnique();
+                    b.HasIndex("StudentsId");
 
                     b.ToTable("StudentEmailAddress");
                 });
 
             modelBuilder.Entity("StudentApp.Models.StudentPhoneNo", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("PhoneId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PhoneId"));
 
                     b.Property<string>("PhoneNo")
                         .IsRequired()
@@ -94,21 +92,20 @@ namespace StudentApp.Migrations
                     b.Property<int>("StudentsId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("PhoneId");
 
-                    b.HasIndex("StudentsId")
-                        .IsUnique();
+                    b.HasIndex("StudentsId");
 
                     b.ToTable("StudentPhoneNo");
                 });
 
             modelBuilder.Entity("StudentApp.Models.Students", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("StudentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0)
-                        .HasColumnName("id");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentId"));
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -133,7 +130,7 @@ namespace StudentApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("StudentId");
 
                     b.ToTable("Student");
                 });
@@ -141,8 +138,8 @@ namespace StudentApp.Migrations
             modelBuilder.Entity("StudentApp.Models.StudentAddress", b =>
                 {
                     b.HasOne("StudentApp.Models.Students", "Students")
-                        .WithOne("AddressStudent")
-                        .HasForeignKey("StudentApp.Models.StudentAddress", "StudentsId")
+                        .WithMany("AddressStudent")
+                        .HasForeignKey("StudentsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -152,8 +149,8 @@ namespace StudentApp.Migrations
             modelBuilder.Entity("StudentApp.Models.StudentEmailAddress", b =>
                 {
                     b.HasOne("StudentApp.Models.Students", "Students")
-                        .WithOne("EmailAddressStudent")
-                        .HasForeignKey("StudentApp.Models.StudentEmailAddress", "StudentsId")
+                        .WithMany("EmailAddressStudent")
+                        .HasForeignKey("StudentsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -163,8 +160,8 @@ namespace StudentApp.Migrations
             modelBuilder.Entity("StudentApp.Models.StudentPhoneNo", b =>
                 {
                     b.HasOne("StudentApp.Models.Students", "Students")
-                        .WithOne("PhoneStudent")
-                        .HasForeignKey("StudentApp.Models.StudentPhoneNo", "StudentsId")
+                        .WithMany("PhoneStudent")
+                        .HasForeignKey("StudentsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -173,14 +170,11 @@ namespace StudentApp.Migrations
 
             modelBuilder.Entity("StudentApp.Models.Students", b =>
                 {
-                    b.Navigation("AddressStudent")
-                        .IsRequired();
+                    b.Navigation("AddressStudent");
 
-                    b.Navigation("EmailAddressStudent")
-                        .IsRequired();
+                    b.Navigation("EmailAddressStudent");
 
-                    b.Navigation("PhoneStudent")
-                        .IsRequired();
+                    b.Navigation("PhoneStudent");
                 });
 #pragma warning restore 612, 618
         }

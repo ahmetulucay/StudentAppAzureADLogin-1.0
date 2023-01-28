@@ -1,5 +1,6 @@
 ﻿
 using StudentApp.Controllers.Validations;
+using System.ComponentModel.DataAnnotations;
 
 namespace StudentApp.Models
 {
@@ -8,11 +9,15 @@ namespace StudentApp.Models
         public EmailAddressStudentRequest()
         {
         }
+
+        public EmailAddressStudentRequest(ICollection<StudentEmailAddress> emailAddressStudent)
+        {
+        }
         public EmailAddressStudentRequest(StudentEmailAddress studentEmailAddress)
         {
             EmailAddress = studentEmailAddress.EmailAddress;
         }
-        [IsNotNullOrEmpty] public string EmailAddress { get; private set; }
+        [IsNotNullOrEmpty] public string EmailAddress { get; set; }
 
         public virtual StudentEmailAddress ToEmailStudent(EmailAddressStudentRequest emailAddressStudentRequest)
         {
