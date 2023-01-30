@@ -42,12 +42,12 @@ public class StudentsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ICollection<StudentResponse>> AddStudent(AddStudentRequest addStudentRequest)
+    public async Task<ActionResult<StudentResponse>> AddStudent(AddStudentRequest addStudentRequest)
     {
         var request = new AddStudentRequest();
         var student = request.ToStudent(addStudentRequest);
         var result = await _service.AddStudent(student);
-        return (ICollection<StudentResponse>)Ok(new StudentResponse(result));
+        return Ok(new StudentResponse(result));
     }
 
     [HttpPut]
