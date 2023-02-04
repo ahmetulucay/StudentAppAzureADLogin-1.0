@@ -1,6 +1,5 @@
 ﻿
 using StudentApp.Controllers.Validations;
-using System.ComponentModel.DataAnnotations;
 
 namespace StudentApp.Models
 {

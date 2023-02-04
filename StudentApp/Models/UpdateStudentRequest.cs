@@ -15,9 +15,9 @@ namespace StudentApp.Models
             LastName = students.LastName;
             School = students.School;
             RegistrationDate = students.RegistrationDate;
-            PhoneStudent = new PhoneStudentRequest(students.PhoneStudent);
-            EmailAddressStudent = new EmailAddressStudentRequest(students.EmailAddressStudent);
-            AddressStudent = new AddressStudentRequest(students.AddressStudent);
+            PhoneStudent = students.PhoneStudent.Select(p => new PhoneStudentRequest(p)).ToList();
+            EmailAddressStudent = students.EmailAddressStudent.Select(p => new EmailAddressStudentRequest(p)).ToList();
+            AddressStudent = students.AddressStudent.Select(p => new AddressStudentRequest(p)).ToList();
         }
 
         [IsNotNullOrEmpty] public string UserName { get; set; }
@@ -26,9 +26,9 @@ namespace StudentApp.Models
         [IsNotNullOrEmpty] public string LastName { get; set; }
         [IsNotNullOrEmpty] public string School { get; set; }
         [ValidateUpdateJoinDate] public DateTime RegistrationDate { get; set; }
-        [IsNotNullOrEmpty] public PhoneStudentRequest PhoneStudent { get; set; }
-        [IsNotNullOrEmpty] public EmailAddressStudentRequest EmailAddressStudent { get; set; }
-        [IsNotNullOrEmpty] public AddressStudentRequest AddressStudent { get; set; }
+        [IsNotNullOrEmpty] public ICollection<PhoneStudentRequest> PhoneStudent { get; set; }
+        [IsNotNullOrEmpty] public ICollection<EmailAddressStudentRequest> EmailAddressStudent { get; set; }
+        [IsNotNullOrEmpty] public ICollection<AddressStudentRequest> AddressStudent { get; set; }
 
 
         public virtual Students ToUpdateStudent(UpdateStudentRequest updateStudentRequest)
@@ -41,9 +41,9 @@ namespace StudentApp.Models
                 LastName = updateStudentRequest.LastName,
                 School = updateStudentRequest.School,
                 RegistrationDate = updateStudentRequest.RegistrationDate,
-                PhoneStudent = (ICollection<StudentPhoneNo>)new PhoneStudentRequest().ToPhoneStudent(updateStudentRequest.PhoneStudent),
-                EmailAddressStudent = (ICollection<StudentEmailAddress>)new EmailAddressStudentRequest().ToEmailStudent(updateStudentRequest.EmailAddressStudent),
-                AddressStudent = (ICollection<StudentAddress>)new AddressStudentRequest().ToAddressStudent(updateStudentRequest.AddressStudent)
+                PhoneStudent = (ICollection<StudentPhoneNo>)updateStudentRequest.PhoneStudent.Select(p => new PhoneStudentRequest()),
+                EmailAddressStudent = (ICollection<StudentEmailAddress>)updateStudentRequest.EmailAddressStudent.Select(p => new EmailAddressStudentRequest()),
+                AddressStudent = (ICollection<StudentAddress>)updateStudentRequest.AddressStudent.Select(p => new AddressStudentRequest()),
             };
         }
     }
