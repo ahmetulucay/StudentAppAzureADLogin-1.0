@@ -1,5 +1,6 @@
 ﻿
 using StudentApp.Controllers.Validations;
+using System.Linq;
 
 namespace StudentApp.Models
 {
@@ -43,7 +44,7 @@ namespace StudentApp.Models
                 RegistrationDate = addStudentRequest.RegistrationDate,
                 PhoneStudent = (ICollection<StudentPhoneNo>)addStudentRequest.PhoneStudent.Select(p => new PhoneStudentRequest()),
                 EmailAddressStudent = (ICollection<StudentEmailAddress>)addStudentRequest.EmailAddressStudent.Select(p => new EmailAddressStudentRequest()),
-                AddressStudent = (ICollection<StudentAddress>)addStudentRequest.AddressStudent.Select(p => new AddressStudentRequest())
+                AddressStudent = (ICollection<StudentAddress>)addStudentRequest.AddressStudent.Select(p => new AddressStudentRequest()),
             };
         }
     }
