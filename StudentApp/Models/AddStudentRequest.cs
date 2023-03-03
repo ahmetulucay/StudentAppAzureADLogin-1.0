@@ -1,6 +1,5 @@
 ﻿
 using StudentApp.Controllers.Validations;
-using System.Linq;
 
 namespace StudentApp.Models
 {
