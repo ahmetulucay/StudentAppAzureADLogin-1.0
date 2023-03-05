@@ -7,8 +7,8 @@ using StudentApp.Services;
 
 namespace StudentApp.Controllers;
 
-[RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
-[Authorize]
+//[RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
+//[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class StudentsController : ControllerBase

@@ -13,8 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<StudentAppContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("StudentAppContext") ?? throw new InvalidOperationException("Connection string 'StudentAppContext' not found.")));
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
 #region AddingServicesToTheContainer
 builder.Services.AddControllersWithViews();
@@ -31,9 +31,9 @@ builder.Services.AddControllers()
 
 #region SecureApi
 builder.Services.AddSwaggerGen(
-    c=>
+    c =>
     {
-        c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title ="Swagger Azure AD Demo", Version= "v1" });
+        c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Swagger Azure AD Demo", Version = "v1" });
         c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
         {
             Description = "Oauth2.0 which uses AuthorizationCode flow",
@@ -81,7 +81,7 @@ app.UseSwaggerUI(s =>
 });
 
 app.UseHttpsRedirection();
-app.UseAuthentication();
+//app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
