@@ -25,5 +25,7 @@ namespace StudentApp.Models
                 EmailAddress = emailAddressStudentRequest.EmailAddress
             };
         }
+
+        public StudentEmailAddress ToEmailStudent() => new StudentEmailAddress { EmailAddress = EmailAddress };
     }
 }

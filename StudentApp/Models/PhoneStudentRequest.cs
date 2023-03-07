@@ -25,5 +25,7 @@ namespace StudentApp.Models
                     PhoneNo = phoneStudentRequest.PhoneNo,
             };
         }
+
+        public StudentPhoneNo ToPhoneStudent() => new StudentPhoneNo { PhoneNo = PhoneNo };
     }
 }

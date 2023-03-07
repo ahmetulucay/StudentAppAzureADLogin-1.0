@@ -42,9 +42,9 @@ namespace StudentApp.Models
                 LastName = addStudentRequest.LastName,
                 School = addStudentRequest.School,
                 RegistrationDate = addStudentRequest.RegistrationDate,
-                PhoneStudent = (ICollection<StudentPhoneNo>)addStudentRequest.PhoneStudent.Select(p => new PhoneStudentRequest()),
-                EmailAddressStudent = (ICollection<StudentEmailAddress>)addStudentRequest.EmailAddressStudent.Select(p => new EmailAddressStudentRequest()),
-                AddressStudent = (ICollection<StudentAddress>)addStudentRequest.AddressStudent.Select(p => new AddressStudentRequest()),
+                PhoneStudent = addStudentRequest.PhoneStudent.Select(p => p.ToPhoneStudent()).ToList(),
+                EmailAddressStudent = addStudentRequest.EmailAddressStudent.Select(e => e.ToEmailStudent()).ToList(),
+                AddressStudent = addStudentRequest.AddressStudent.Select(p => p.ToAddressStudent()).ToList(),
             };
         }
     }

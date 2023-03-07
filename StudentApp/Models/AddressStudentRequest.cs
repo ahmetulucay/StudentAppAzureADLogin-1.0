@@ -35,5 +35,16 @@ namespace StudentApp.Models
                     Country = addressStudentRequest.Country
             };
         }
+
+        public StudentAddress ToAddressStudent()
+        {
+            return new StudentAddress
+            {
+                    Address= Address,
+                    City = City,
+                    PostNumber = PostNumber,
+                    Country = Country
+            };
+        }
     }
 }
