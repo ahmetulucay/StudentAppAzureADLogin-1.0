@@ -6,8 +6,8 @@ STEPS (Swagger Azure AD Autht - Swagger Azure AD Login)=
 ********************************************************
 ![Authorized Page](https://user-images.githubusercontent.com/57094137/210284591-4a4d7eaa-275f-49ea-bf0a-a87bdf80f35f.jpg)
 
-Opening programs                     =
---------------------------------------
+Open programs                     =
+-----------------------------------
 Open Visual Studio/-Code. 
 After that Open your project/api (Exp.=StudentApp)
 
