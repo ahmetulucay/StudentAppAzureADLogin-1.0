@@ -41,9 +41,12 @@ namespace StudentApp.Models
                 LastName = updateStudentRequest.LastName,
                 School = updateStudentRequest.School,
                 RegistrationDate = updateStudentRequest.RegistrationDate,
-                PhoneStudent = (ICollection<StudentPhoneNo>)updateStudentRequest.PhoneStudent.Select(p => new PhoneStudentRequest()),
-                EmailAddressStudent = (ICollection<StudentEmailAddress>)updateStudentRequest.EmailAddressStudent.Select(p => new EmailAddressStudentRequest()),
-                AddressStudent = (ICollection<StudentAddress>)updateStudentRequest.AddressStudent.Select(p => new AddressStudentRequest()),
+                //PhoneStudent = (ICollection<StudentPhoneNo>)updateStudentRequest.PhoneStudent.Select(p => new PhoneStudentRequest()),
+                //EmailAddressStudent = (ICollection<StudentEmailAddress>)updateStudentRequest.EmailAddressStudent.Select(p => new EmailAddressStudentRequest()),
+                //AddressStudent = (ICollection<StudentAddress>)updateStudentRequest.AddressStudent.Select(p => new AddressStudentRequest()),
+                PhoneStudent = updateStudentRequest.PhoneStudent.Select(p => p.ToPhoneStudent()).ToList(),
+                EmailAddressStudent = updateStudentRequest.EmailAddressStudent.Select(e => e.ToEmailStudent()).ToList(),
+                AddressStudent = updateStudentRequest.AddressStudent.Select(p => p.ToAddressStudent()).ToList(),
             };
         }
     }

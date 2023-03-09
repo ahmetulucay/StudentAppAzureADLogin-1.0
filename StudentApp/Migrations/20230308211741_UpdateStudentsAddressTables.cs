@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace StudentApp.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateStudentTables : Migration
+    public partial class UpdateStudentsAddressTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,8 +48,7 @@ namespace StudentApp.Migrations
                         name: "FK_StudentAddress_Student_StudentsId",
                         column: x => x.StudentsId,
                         principalTable: "Student",
-                        principalColumn: "StudentId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "StudentId");
                 });
 
             migrationBuilder.CreateTable(
@@ -68,8 +67,7 @@ namespace StudentApp.Migrations
                         name: "FK_StudentEmailAddress_Student_StudentsId",
                         column: x => x.StudentsId,
                         principalTable: "Student",
-                        principalColumn: "StudentId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "StudentId");
                 });
 
             migrationBuilder.CreateTable(
@@ -88,8 +86,7 @@ namespace StudentApp.Migrations
                         name: "FK_StudentPhoneNo_Student_StudentsId",
                         column: x => x.StudentsId,
                         principalTable: "Student",
-                        principalColumn: "StudentId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "StudentId");
                 });
 
             migrationBuilder.CreateIndex(

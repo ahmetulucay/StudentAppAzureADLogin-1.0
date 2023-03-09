@@ -139,9 +139,7 @@ namespace StudentApp.Migrations
                 {
                     b.HasOne("StudentApp.Models.Students", "Students")
                         .WithMany("AddressStudent")
-                        .HasForeignKey("StudentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StudentsId");
 
                     b.Navigation("Students");
                 });
@@ -150,9 +148,7 @@ namespace StudentApp.Migrations
                 {
                     b.HasOne("StudentApp.Models.Students", "Students")
                         .WithMany("EmailAddressStudent")
-                        .HasForeignKey("StudentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StudentsId");
 
                     b.Navigation("Students");
                 });
@@ -161,9 +157,7 @@ namespace StudentApp.Migrations
                 {
                     b.HasOne("StudentApp.Models.Students", "Students")
                         .WithMany("PhoneStudent")
-                        .HasForeignKey("StudentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StudentsId");
 
                     b.Navigation("Students");
                 });

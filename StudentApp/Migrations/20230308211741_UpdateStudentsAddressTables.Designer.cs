@@ -12,8 +12,8 @@ using StudentApp.Data;
 namespace StudentApp.Migrations
 {
     [DbContext(typeof(StudentAppContext))]
-    [Migration("20230127094453_UpdateStudentTables")]
-    partial class UpdateStudentTables
+    [Migration("20230308211741_UpdateStudentsAddressTables")]
+    partial class UpdateStudentsAddressTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -142,9 +142,7 @@ namespace StudentApp.Migrations
                 {
                     b.HasOne("StudentApp.Models.Students", "Students")
                         .WithMany("AddressStudent")
-                        .HasForeignKey("StudentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StudentsId");
 
                     b.Navigation("Students");
                 });
@@ -153,9 +151,7 @@ namespace StudentApp.Migrations
                 {
                     b.HasOne("StudentApp.Models.Students", "Students")
                         .WithMany("EmailAddressStudent")
-                        .HasForeignKey("StudentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StudentsId");
 
                     b.Navigation("Students");
                 });
@@ -164,9 +160,7 @@ namespace StudentApp.Migrations
                 {
                     b.HasOne("StudentApp.Models.Students", "Students")
                         .WithMany("PhoneStudent")
-                        .HasForeignKey("StudentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StudentsId");
 
                     b.Navigation("Students");
                 });
