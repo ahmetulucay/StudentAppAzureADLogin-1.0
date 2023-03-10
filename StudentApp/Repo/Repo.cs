@@ -30,8 +30,6 @@ public class Repo : IRepo
 
     public async Task<Students> UpdateStudent(int id, Students students)
     {
-        //Avoid cascade!
-        //var result = await _context.Student.Include(s => s.PhoneStudent).Include(s => s.EmailAddressStudent).Include(s => s.AddressStudent).FirstOrDefaultAsync(s => s.StudentId == id);
         var result = await _context.Student.FirstOrDefaultAsync(s => s.StudentId == id);
         if (result != null)
         {

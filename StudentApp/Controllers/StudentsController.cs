@@ -1,14 +1,10 @@
 ﻿
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Web.Resource;
 using StudentApp.Models;
 using StudentApp.Services;
 
 namespace StudentApp.Controllers;
 
-//[RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
-//[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class StudentsController : ControllerBase
