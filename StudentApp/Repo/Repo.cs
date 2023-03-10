@@ -30,7 +30,9 @@ public class Repo : IRepo
 
     public async Task<Students> UpdateStudent(int id, Students students)
     {
-        var result = await _context.Student.Include(s => s.PhoneStudent).Include(s => s.EmailAddressStudent).Include(s => s.AddressStudent).FirstOrDefaultAsync(s => s.StudentId == id);
+        //Avoid cascade!
+        //var result = await _context.Student.Include(s => s.PhoneStudent).Include(s => s.EmailAddressStudent).Include(s => s.AddressStudent).FirstOrDefaultAsync(s => s.StudentId == id);
+        var result = await _context.Student.FirstOrDefaultAsync(s => s.StudentId == id);
         if (result != null)
         {
             result.UserName = students.UserName;
@@ -59,7 +61,7 @@ public class Repo : IRepo
         }
         try
         {
-            _context.Student.Remove(result);
+            _context.RemoveRange(result);
             await _context.SaveChangesAsync();
             return true;
         }

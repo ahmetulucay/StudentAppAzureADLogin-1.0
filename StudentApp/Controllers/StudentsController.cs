@@ -70,6 +70,8 @@ public class StudentsController : ControllerBase
         var result = await _service.DeleteStudent(id);
         if (result == null)
             return NotFound($"False: Wrong Id {id}");
+        if (result == false)
+            return NotFound($"False: Deleting Id {id} is NOT successful");
         return Ok($"True: Deleting Id {id} is successful");
     }
 }
