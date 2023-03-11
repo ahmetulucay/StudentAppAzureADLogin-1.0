@@ -13,8 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<StudentAppContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("StudentAppContext") ?? throw new InvalidOperationException("Connection string 'StudentAppContext' not found.")));
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
 #region AddingServicesToTheContainer
 builder.Services.AddControllersWithViews();
@@ -72,6 +72,7 @@ builder.Services.AddTransient<IRepo, Repo>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+#region Pipeline
 app.UseSwagger();
 app.UseSwaggerUI(s =>
 {
@@ -81,7 +82,7 @@ app.UseSwaggerUI(s =>
 });
 
 app.UseHttpsRedirection();
-app.UseAuthentication();
+//app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -89,3 +90,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+#endregion
