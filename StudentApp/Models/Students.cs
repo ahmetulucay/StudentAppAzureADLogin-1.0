@@ -7,7 +7,7 @@ namespace StudentApp.Models
 {
     public class Students
     {
-        [Key, Column(Order = 0)]
+        [Key]
         public int StudentId { get; set; }
         public string UserName { get; set; }
         public string FirstName { get; set; }
@@ -22,7 +22,7 @@ namespace StudentApp.Models
 
     public class StudentPhoneNo
     {
-        [Key, Column(Order = 0)]
+        [Key]
         public int PhoneId { get; set; }
         public string PhoneNo { get; set; }
         [ForeignKey("Students")]
@@ -32,7 +32,7 @@ namespace StudentApp.Models
 
     public class StudentEmailAddress
     {
-        [Key, Column(Order = 0)]
+        [Key]
         public int EmailId { get; set; }
         public string EmailAddress { get; set; }
         [ForeignKey("Students")]
@@ -42,7 +42,7 @@ namespace StudentApp.Models
     }
     public class StudentAddress
     {
-        [Key, Column(Order = 0)]
+        [Key]
         public int AddressId { get; set; }
         public string Address { get; set; }
         public string City { get; set; }
