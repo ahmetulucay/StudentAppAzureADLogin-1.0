@@ -59,7 +59,7 @@ public class Repo : IRepo
         }
         try
         {
-            _context.RemoveRange(result);
+            _context.Student.Remove(result);
             await _context.SaveChangesAsync();
             return true;
         }
