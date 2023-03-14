@@ -77,6 +77,32 @@ namespace StudentApp.Migrations
                     b.ToTable("StudentEmailAddress");
                 });
 
+            modelBuilder.Entity("StudentApp.Models.StudentImage", b =>
+                {
+                    b.Property<int>("ImageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageId"));
+
+                    b.Property<string>("ImageName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentsId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ImageId");
+
+                    b.HasIndex("StudentsId");
+
+                    b.ToTable("StudentImage");
+                });
+
             modelBuilder.Entity("StudentApp.Models.StudentPhoneNo", b =>
                 {
                     b.Property<int>("PhoneId")
@@ -139,9 +165,7 @@ namespace StudentApp.Migrations
                 {
                     b.HasOne("StudentApp.Models.Students", "Students")
                         .WithMany("AddressStudent")
-                        .HasForeignKey("StudentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StudentsId");
 
                     b.Navigation("Students");
                 });
@@ -150,9 +174,16 @@ namespace StudentApp.Migrations
                 {
                     b.HasOne("StudentApp.Models.Students", "Students")
                         .WithMany("EmailAddressStudent")
-                        .HasForeignKey("StudentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StudentsId");
+
+                    b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("StudentApp.Models.StudentImage", b =>
+                {
+                    b.HasOne("StudentApp.Models.Students", "Students")
+                        .WithMany("ImageStudent")
+                        .HasForeignKey("StudentsId");
 
                     b.Navigation("Students");
                 });
@@ -161,9 +192,7 @@ namespace StudentApp.Migrations
                 {
                     b.HasOne("StudentApp.Models.Students", "Students")
                         .WithMany("PhoneStudent")
-                        .HasForeignKey("StudentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StudentsId");
 
                     b.Navigation("Students");
                 });
@@ -173,6 +202,8 @@ namespace StudentApp.Migrations
                     b.Navigation("AddressStudent");
 
                     b.Navigation("EmailAddressStudent");
+
+                    b.Navigation("ImageStudent");
 
                     b.Navigation("PhoneStudent");
                 });

@@ -8,7 +8,6 @@ namespace StudentApp.Repo;
 public class Repo : IRepo
 {
     private readonly StudentAppContext _context;
- 
 
     public Repo(StudentAppContext context)
     {

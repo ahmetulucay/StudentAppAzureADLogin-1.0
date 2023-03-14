@@ -18,6 +18,7 @@ namespace StudentApp.Models
         public ICollection<StudentPhoneNo> PhoneStudent { get; set; }
         public ICollection<StudentEmailAddress> EmailAddressStudent { get; set; }
         public ICollection<StudentAddress> AddressStudent { get; set; }
+        public ICollection<StudentImage> ImageStudent { get; set; }
     }
 
     public class StudentPhoneNo
@@ -48,6 +49,17 @@ namespace StudentApp.Models
         public string City { get; set; }
         public int PostNumber { get; set; }
         public string Country { get; set; }
+        [ForeignKey("Students")]
+        public int StudentsId { get; set; }
+        public Students Students { get; set; }
+    }
+
+    public class StudentImage
+    {
+        [Key]
+        public int ImageId { get; set; }
+        public string Title { get; set; }
+        public string ImageName { get; set; }
         [ForeignKey("Students")]
         public int StudentsId { get; set; }
         public Students Students { get; set; }

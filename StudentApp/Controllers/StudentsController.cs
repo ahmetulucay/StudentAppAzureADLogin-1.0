@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
+using Microsoft.Net.Http.Headers;
 using StudentApp.Models;
 using StudentApp.Services;
+using System.Text;
 
 namespace StudentApp.Controllers;
 
@@ -74,4 +76,11 @@ public class StudentsController : ControllerBase
             return NotFound($"False: Deleting Id {id} is NOT successful");
         return Ok($"True: Deleting Id {id} is successful");
     }
+
+    ////UploadFile
+    //[HttpPost]
+    //public async Task<ImageModel> UploadImage (ImageModel image)
+    //{
+    //    return Ok(image);
+    //}
 }

@@ -21,6 +21,7 @@ namespace StudentApp.Data
         public DbSet<StudentPhoneNo> StudentPhoneNo { get; set; }
         public DbSet<StudentEmailAddress> StudentEmailAddress { get; set; }
         public DbSet<StudentAddress> StudentAddress { get; set; }
+        public DbSet<StudentImage> StudentImage { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             {
@@ -39,6 +40,12 @@ namespace StudentApp.Data
                 modelBuilder.Entity<StudentAddress>()
                             .HasOne(e => e.Students)
                             .WithMany(d => d.AddressStudent)
+                            .HasForeignKey(e => e.StudentsId)
+                            .IsRequired(false);
+
+                modelBuilder.Entity<StudentImage>()
+                            .HasOne(e => e.Students)
+                            .WithMany(d => d.ImageStudent)
                             .HasForeignKey(e => e.StudentsId)
                             .IsRequired(false);
             }
