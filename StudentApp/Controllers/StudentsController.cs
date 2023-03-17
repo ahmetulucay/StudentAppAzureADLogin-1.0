@@ -1,11 +1,8 @@
 ﻿
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Web.Resource;
-using Microsoft.Net.Http.Headers;
 using StudentApp.Models;
 using StudentApp.Services;
-using System.Text;
+using StudentApp.Data;
 
 namespace StudentApp.Controllers;
 
@@ -16,11 +13,20 @@ namespace StudentApp.Controllers;
 public class StudentsController : ControllerBase
 {
     private readonly IService _service;
+    private readonly IWebHostEnvironment _hostingEnvironment;
 
+    public StudentAppContext _context { get; set; }             
+    public IWebHostEnvironment _webHostEnvironment { get; set; }
     public StudentsController(IService service)
     {
         _service = service;
     }
+
+    //public StudentsController (StudentAppContext context, IWebHostEnvironment webHostEnvironment)
+    //{
+    //    _context = context;
+    //    _webHostEnvironment = webHostEnvironment;
+    //}
 
     [HttpGet]
     public async Task<ActionResult<List<StudentResponse>>> GetStudent()
@@ -77,10 +83,36 @@ public class StudentsController : ControllerBase
         return Ok($"True: Deleting Id {id} is successful");
     }
 
-    ////UploadFile
-    //[HttpPost]
-    //public async Task<ImageModel> UploadImage (ImageModel image)
-    //{
-    //    return Ok(image);
-    //}
+    //UploadImage  <<<<---
+    [HttpPost("UploadImage")]
+    //[Route("{id}")]
+    public async Task<IActionResult> UploadImage(IFormFile uploadedFile/*, int id*/)
+    {
+        //Save image to wwwroot/image
+        string wwwRootPath = _webHostEnvironment.WebRootPath;
+        string path = Path.Combine(wwwRootPath + "/Image", uploadedFile.FileName);
+
+        using var stream = new MemoryStream();
+        await uploadedFile.CopyToAsync(stream);
+        var byteArray = stream.ToArray();
+
+        //Save image path to Db by using Student id...
+
+        try
+        {
+            using (var fs = new FileStream(path, FileMode.Create))
+            {
+                using (BinaryWriter bw = new BinaryWriter(fs))
+                {
+                    bw.Write (byteArray); 
+                };
+            }
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return NotFound("false: uploading image is not successful");
+        }
+        return Ok();
+    }
 }

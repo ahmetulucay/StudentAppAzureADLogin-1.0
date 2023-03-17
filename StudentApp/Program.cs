@@ -9,7 +9,14 @@ using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 #endregion
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    Args = args,
+    ApplicationName = typeof(Program).Assembly.FullName,
+    ContentRootPath = Directory.GetCurrentDirectory(),
+    EnvironmentName = Environments.Staging,
+    WebRootPath = "wwwroot"
+});
 builder.Services.AddControllers();
 builder.Services.AddDbContext<StudentAppContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("StudentAppContext") ?? throw new InvalidOperationException("Connection string 'StudentAppContext' not found.")));
@@ -31,9 +38,9 @@ builder.Services.AddControllers()
 
 #region SecureApi
 builder.Services.AddSwaggerGen(
-    c=>
+    c =>
     {
-        c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title ="Swagger Azure AD Demo", Version= "v1" });
+        c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Swagger Azure AD Demo", Version = "v1" });
         c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
         {
             Description = "Oauth2.0 which uses AuthorizationCode flow",

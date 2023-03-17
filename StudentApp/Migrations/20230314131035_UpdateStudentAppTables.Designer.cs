@@ -12,8 +12,8 @@ using StudentApp.Data;
 namespace StudentApp.Migrations
 {
     [DbContext(typeof(StudentAppContext))]
-    [Migration("20230314100608_UpdateStudentsAddressTables")]
-    partial class UpdateStudentsAddressTables
+    [Migration("20230314131035_UpdateStudentAppTables")]
+    partial class UpdateStudentAppTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
