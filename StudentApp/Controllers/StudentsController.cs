@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using StudentApp.Models;
 using StudentApp.Services;
-using StudentApp.Data;
 
 namespace StudentApp.Controllers;
 
@@ -13,20 +12,12 @@ namespace StudentApp.Controllers;
 public class StudentsController : ControllerBase
 {
     private readonly IService _service;
-    private readonly IWebHostEnvironment _hostingEnvironment;
-
-    public StudentAppContext _context { get; set; }             
-    public IWebHostEnvironment _webHostEnvironment { get; set; }
-    public StudentsController(IService service)
+    private readonly IWebHostEnvironment _webHostEnvironment;
+    public StudentsController(IService service, IWebHostEnvironment webHostEnvironment)
     {
         _service = service;
+        _webHostEnvironment = webHostEnvironment;
     }
-
-    //public StudentsController (StudentAppContext context, IWebHostEnvironment webHostEnvironment)
-    //{
-    //    _context = context;
-    //    _webHostEnvironment = webHostEnvironment;
-    //}
 
     [HttpGet]
     public async Task<ActionResult<List<StudentResponse>>> GetStudent()
@@ -83,7 +74,7 @@ public class StudentsController : ControllerBase
         return Ok($"True: Deleting Id {id} is successful");
     }
 
-    //UploadImage  <<<<---
+    //UploadImage 
     [HttpPost("UploadImage")]
     //[Route("{id}")]
     public async Task<IActionResult> UploadImage(IFormFile uploadedFile/*, int id*/)

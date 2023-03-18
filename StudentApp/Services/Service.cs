@@ -3,7 +3,6 @@ using StudentApp.Models;
 using StudentApp.Repo;
 
 namespace StudentApp.Services;
-
 public class Service : IService
 { 
 

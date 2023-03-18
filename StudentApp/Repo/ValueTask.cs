@@ -1,6 +1,4 @@
-﻿namespace StudentApp.Repo
+﻿namespace StudentApp.Repo;
+internal class ValueTask
 {
-    internal class ValueTask
-    {
-    }
 }

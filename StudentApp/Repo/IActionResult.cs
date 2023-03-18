@@ -1,6 +1,4 @@
-﻿namespace StudentApp.Repo
+﻿namespace StudentApp.Repo;
+public interface IActionResult<T>
 {
-    public interface IActionResult<T>
-    {
-    }
 }

@@ -3,8 +3,6 @@ using System.ComponentModel.DataAnnotations;
 using StudentApp.Models;
 
 namespace StudentApp.Controllers.Validations;
-
-
 public class ValidateAddJoinDateAttribute : ValidationAttribute
 {
     public new string ErrorMessage = "Registration date can not be greater than current date";
