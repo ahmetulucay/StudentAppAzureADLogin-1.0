@@ -77,25 +77,29 @@ public class StudentsController : ControllerBase
     //UploadImage 
     [HttpPost("UploadImage")]
     //[Route("{id}")]
-    public async Task<IActionResult> UploadImage(IFormFile uploadedFile/*, int id*/)
+    public async Task<IActionResult> UploadImage(IFormFile uploadedFile, int id)
     {
-        //Save image to wwwroot/image
-        string wwwRootPath = _webHostEnvironment.WebRootPath;
-        string path = Path.Combine(wwwRootPath + "/Image", uploadedFile.FileName);
-
-        using var stream = new MemoryStream();
-        await uploadedFile.CopyToAsync(stream);
-        var byteArray = stream.ToArray();
-
-        //Save image path to Db by using Student id...
-
+        var result = await _service.GetAsId(id);
+        if (result == null) return NotFound($"Wrong Id {id}");
         try
         {
+            //Save image to wwwroot/image
+            string wwwRootPath = _webHostEnvironment.WebRootPath;
+            string path = Path.Combine(wwwRootPath + "/Image", uploadedFile.FileName);
+
+            var si = new StudentImage { Path = path, ImageName = uploadedFile.FileName };
+            result.ImageStudent.Add(si);
+
+            using var stream = new MemoryStream();
+            await uploadedFile.CopyToAsync(stream);
+            var byteArray = stream.ToArray();
+            //Save image path to Db by using Student id...
+
             using (var fs = new FileStream(path, FileMode.Create))
             {
                 using (BinaryWriter bw = new BinaryWriter(fs))
                 {
-                    bw.Write (byteArray); 
+                    bw.Write(byteArray);
                 };
             }
             return Ok();
@@ -104,6 +108,5 @@ public class StudentsController : ControllerBase
         {
             return NotFound("false: uploading image is not successful");
         }
-        return Ok();
     }
 }

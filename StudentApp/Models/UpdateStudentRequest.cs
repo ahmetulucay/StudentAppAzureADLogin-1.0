@@ -17,6 +17,7 @@ public class UpdateStudentRequest {
         PhoneStudent = students.PhoneStudent.Select(p => new PhoneStudentRequest(p)).ToList();
         EmailAddressStudent = students.EmailAddressStudent.Select(p => new EmailAddressStudentRequest(p)).ToList();
         AddressStudent = students.AddressStudent.Select(p => new AddressStudentRequest(p)).ToList();
+        ImageStudent = students.ImageStudent.Select(p => new StudentImage()).ToList();
     }
 
     [IsNotNullOrEmpty] public string UserName { get; set; }
@@ -28,6 +29,7 @@ public class UpdateStudentRequest {
     [IsNotNullOrEmpty] public ICollection<PhoneStudentRequest> PhoneStudent { get; set; }
     [IsNotNullOrEmpty] public ICollection<EmailAddressStudentRequest> EmailAddressStudent { get; set; }
     [IsNotNullOrEmpty] public ICollection<AddressStudentRequest> AddressStudent { get; set; }
+    [IsNotNullOrEmpty] public ICollection<StudentImage> ImageStudent { get; set; }
 
 
     public virtual Students ToUpdateStudent(UpdateStudentRequest updateStudentRequest)
@@ -43,6 +45,7 @@ public class UpdateStudentRequest {
             PhoneStudent = updateStudentRequest.PhoneStudent.Select(p => p.ToPhoneStudent()).ToList(),
             EmailAddressStudent = updateStudentRequest.EmailAddressStudent.Select(e => e.ToEmailStudent()).ToList(),
             AddressStudent = updateStudentRequest.AddressStudent.Select(p => p.ToAddressStudent()).ToList(),
+            ImageStudent = updateStudentRequest.ImageStudent.ToList()
         };
     }
 }

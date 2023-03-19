@@ -15,10 +15,10 @@ public class Repo : IRepo
     }
 
     public async Task<List<Students>> Get() =>
-        await _context.Student.Include(s => s.PhoneStudent).Include(s => s.EmailAddressStudent).Include(s => s.AddressStudent).ToListAsync();
+        await _context.Student.Include(s => s.PhoneStudent).Include(s => s.EmailAddressStudent).Include(s => s.AddressStudent).Include(s => s.ImageStudent).ToListAsync();
 
     public async Task<Students> GetAsId(int id) =>
-        await _context.Student.Include(s => s.PhoneStudent).Include(s => s.EmailAddressStudent).Include(s => s.AddressStudent).FirstOrDefaultAsync(s => s.StudentId == id);
+        await _context.Student.Include(s => s.PhoneStudent).Include(s => s.EmailAddressStudent).Include(s => s.AddressStudent).Include(s => s.ImageStudent).FirstOrDefaultAsync(s => s.StudentId == id);
 
     public async Task<Students> AddStudent(Students students)
     {
@@ -41,6 +41,7 @@ public class Repo : IRepo
             result.PhoneStudent = students.PhoneStudent;
             result.EmailAddressStudent= students.EmailAddressStudent;
             result.AddressStudent = students.AddressStudent;
+            result.ImageStudent = students.ImageStudent;
 
             _context.Student.Update(result);
             await _context.SaveChangesAsync();

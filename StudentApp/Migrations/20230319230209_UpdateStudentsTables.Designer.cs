@@ -12,8 +12,8 @@ using StudentApp.Data;
 namespace StudentApp.Migrations
 {
     [DbContext(typeof(StudentAppContext))]
-    [Migration("20230314131035_UpdateStudentAppTables")]
-    partial class UpdateStudentAppTables
+    [Migration("20230319230209_UpdateStudentsTables")]
+    partial class UpdateStudentsTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -92,12 +92,12 @@ namespace StudentApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("StudentsId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
+                    b.Property<string>("Path")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentsId")
+                        .HasColumnType("int");
 
                     b.HasKey("ImageId");
 

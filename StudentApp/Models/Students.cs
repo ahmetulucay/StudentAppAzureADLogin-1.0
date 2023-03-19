@@ -18,7 +18,7 @@ public class Students
     public ICollection<StudentPhoneNo> PhoneStudent { get; set; }
     public ICollection<StudentEmailAddress> EmailAddressStudent { get; set; }
     public ICollection<StudentAddress> AddressStudent { get; set; }
-    public ICollection<StudentImage> ImageStudent { get; set; }
+    public ICollection<StudentImage> ImageStudent { get; set; } = new HashSet<StudentImage>();
 }
 
 public class StudentPhoneNo
@@ -58,12 +58,9 @@ public class StudentImage
 {
     [Key]
     public int ImageId { get; set; }
-    public string Title { get; set; }
+    public string Path { get; set; }
     [DisplayName("Image Name")]
     public string ImageName { get; set; }
-    [NotMapped]
-    [DisplayName("Upload File")]
-    public IFormFile ImageFile { get; set; }
 
     [ForeignKey("Students")]
     public int StudentsId { get; set; }
