@@ -17,12 +17,12 @@ public class UpdateStudentRequest {
         PhoneStudent = students.PhoneStudent.Select(p => new PhoneStudentRequest(p)).ToList();
         EmailAddressStudent = students.EmailAddressStudent.Select(p => new EmailAddressStudentRequest(p)).ToList();
         AddressStudent = students.AddressStudent.Select(p => new AddressStudentRequest(p)).ToList();
-        ImageStudent = students.ImageStudent.Select(p => new StudentImage()).ToList();
+        ImageStudent = students.ImageStudent.ToList();
     }
 
     [IsNotNullOrEmpty] public string UserName { get; set; }
     [IsNotNullOrEmpty] public string FirstName { get; set; }
-    public string SecondName { get; set; }
+    [IsNotNullOrEmpty] public string SecondName { get; set; }
     [IsNotNullOrEmpty] public string LastName { get; set; }
     [IsNotNullOrEmpty] public string School { get; set; }
     [ValidateUpdateJoinDate] public DateTime RegistrationDate { get; set; }
@@ -43,7 +43,7 @@ public class UpdateStudentRequest {
             School = updateStudentRequest.School,
             RegistrationDate = updateStudentRequest.RegistrationDate,
             PhoneStudent = updateStudentRequest.PhoneStudent.Select(p => p.ToPhoneStudent()).ToList(),
-            EmailAddressStudent = updateStudentRequest.EmailAddressStudent.Select(e => e.ToEmailStudent()).ToList(),
+            EmailAddressStudent = updateStudentRequest.EmailAddressStudent.Select(p => p.ToEmailStudent()).ToList(),
             AddressStudent = updateStudentRequest.AddressStudent.Select(p => p.ToAddressStudent()).ToList(),
             ImageStudent = updateStudentRequest.ImageStudent.ToList()
         };

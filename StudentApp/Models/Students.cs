@@ -1,6 +1,4 @@
 ﻿
-
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,7 +16,7 @@ public class Students
     public ICollection<StudentPhoneNo> PhoneStudent { get; set; }
     public ICollection<StudentEmailAddress> EmailAddressStudent { get; set; }
     public ICollection<StudentAddress> AddressStudent { get; set; }
-    public ICollection<StudentImage> ImageStudent { get; set; } = new HashSet<StudentImage>();
+    public ICollection<StudentImage> ImageStudent { get; set; } /*= new HashSet<StudentImage>();*/
 }
 
 public class StudentPhoneNo
@@ -59,7 +57,6 @@ public class StudentImage
     [Key]
     public int ImageId { get; set; }
     public string Path { get; set; }
-    [DisplayName("Image Name")]
     public string ImageName { get; set; }
 
     [ForeignKey("Students")]

@@ -6,6 +6,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>36532767-0a66-4c60-8c8d-f74116c147fc</UserSecretsId>
   </PropertyGroup>
+	
+  <ItemGroup>
+    <Content Remove="wwwroot\Image\0403_1024.jpg" />
+    <Content Remove="wwwroot\Image\205774.jpg" />
+    <Content Remove="wwwroot\Image\34SC021.JPG" />
+    <Content Remove="wwwroot\Image\487708.jpg" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="LanguageExt.Core" Version="4.4.0" />

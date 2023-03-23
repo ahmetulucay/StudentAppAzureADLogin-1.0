@@ -1,6 +1,5 @@
 ﻿
 using StudentApp.Controllers.Validations;
-using System.Linq;
 
 namespace StudentApp.Models;
 public class AddStudentRequest
@@ -19,12 +18,12 @@ public class AddStudentRequest
         PhoneStudent = students.PhoneStudent.Select(p => new PhoneStudentRequest(p)).ToList();
         EmailAddressStudent = students.EmailAddressStudent.Select(p => new EmailAddressStudentRequest(p)).ToList();
         AddressStudent = students.AddressStudent.Select(p => new AddressStudentRequest(p)).ToList();
-        ImageStudent = students.ImageStudent.Select(p => new StudentImage()).ToList();
+        ImageStudent = students.ImageStudent.ToList();
     }
 
     [IsNotNullOrEmpty] public string UserName { get; set; }
     [IsNotNullOrEmpty] public string FirstName { get; set; }
-    public string SecondName { get; set; }
+    [IsNotNullOrEmpty] public string SecondName { get; set; }
     [IsNotNullOrEmpty] public string LastName { get; set; }
     [IsNotNullOrEmpty] public string School { get; set; }
     [ValidateAddJoinDate] public DateTime RegistrationDate { get; set; }

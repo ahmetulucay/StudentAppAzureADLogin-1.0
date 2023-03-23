@@ -1,5 +1,8 @@
 ﻿
+using LanguageExt.Common;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using StudentApp.Data;
 using StudentApp.Models;
 using StudentApp.Services;
 
@@ -13,10 +16,12 @@ public class StudentsController : ControllerBase
 {
     private readonly IService _service;
     private readonly IWebHostEnvironment _webHostEnvironment;
-    public StudentsController(IService service, IWebHostEnvironment webHostEnvironment)
+    private readonly StudentAppContext _context;
+    public StudentsController(IService service, IWebHostEnvironment webHostEnvironment, StudentAppContext context)
     {
         _service = service;
         _webHostEnvironment = webHostEnvironment;
+        _context = context;
     }
 
     [HttpGet]
@@ -77,7 +82,7 @@ public class StudentsController : ControllerBase
     //UploadImage 
     [HttpPost("UploadImage")]
     //[Route("{id}")]
-    public async Task<IActionResult> UploadImage(IFormFile uploadedFile, int id)
+    public async Task<ActionResult> UploadImage(IFormFile uploadedFile, int id)
     {
         var result = await _service.GetAsId(id);
         if (result == null) return NotFound($"Wrong Id {id}");
@@ -85,15 +90,16 @@ public class StudentsController : ControllerBase
         {
             //Save image to wwwroot/image
             string wwwRootPath = _webHostEnvironment.WebRootPath;
-            string path = Path.Combine(wwwRootPath + "/Image", uploadedFile.FileName);
+            string path = Path.Combine(wwwRootPath + "/Image/", uploadedFile.FileName);
 
-            var si = new StudentImage { Path = path, ImageName = uploadedFile.FileName };
+            //Save image path to Db 
+            var si = new StudentImage {Path = path, ImageName = uploadedFile.FileName};
             result.ImageStudent.Add(si);
+            await _service.UpdateStudent(id, result);
 
             using var stream = new MemoryStream();
             await uploadedFile.CopyToAsync(stream);
             var byteArray = stream.ToArray();
-            //Save image path to Db by using Student id...
 
             using (var fs = new FileStream(path, FileMode.Create))
             {
@@ -102,7 +108,7 @@ public class StudentsController : ControllerBase
                     bw.Write(byteArray);
                 };
             }
-            return Ok();
+            return Ok(new StudentResponse(result));
         }
         catch (Exception ex)
         {
