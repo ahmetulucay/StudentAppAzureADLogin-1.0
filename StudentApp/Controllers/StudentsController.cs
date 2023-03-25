@@ -46,10 +46,12 @@ public class StudentsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<StudentResponse>> AddStudent(AddStudentRequest addStudentRequest)
+    public async Task<ActionResult<StudentResponse>> AddStudent(AddStudentRequest addStudentRequest, IFormFile uploadedFile)
     {
+        var images = await SaveImageAsync(uploadedFile);
         var request = new AddStudentRequest();
         var student = request.ToStudent(addStudentRequest);
+        if (images is not null) student.ImageStudent = images;
         var result = await _service.AddStudent(student);
         return Ok(new StudentResponse(result));
     }
@@ -114,5 +116,26 @@ public class StudentsController : ControllerBase
         {
             return NotFound("false: uploading image is not successful");
         }
+    }
+
+    private async Task<List<StudentImage>> SaveImageAsync(IFormFile uploadedFile)
+    {
+        //Save image to wwwroot/image
+        string wwwRootPath = _webHostEnvironment.WebRootPath;
+        string path = Path.Combine(wwwRootPath + "/Image/", uploadedFile.FileName);
+
+        using var stream = new MemoryStream();
+        await uploadedFile.CopyToAsync(stream);
+        var byteArray = stream.ToArray();
+
+        using (var fs = new FileStream(path, FileMode.Create))
+        {
+            using (BinaryWriter bw = new BinaryWriter(fs)) { bw.Write(byteArray); };
+        }
+
+        var images = new List<StudentImage>();
+        var studentImage = new StudentImage { ImageName = uploadedFile.FileName, Path = path };
+        images.Add(studentImage);
+        return images;
     }
 }
