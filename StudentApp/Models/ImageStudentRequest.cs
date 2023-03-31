@@ -1,3 +1,6 @@
+
+using StudentApp.Controllers.Validations;
+
 namespace StudentApp.Models;
 
 public class ImageStudentRequest
@@ -7,12 +10,14 @@ public class ImageStudentRequest
 
     public ImageStudentRequest(StudentImage studentImage)
     {
+        ImageId = studentImage.ImageId;
         ImageName = studentImage.ImageName;
         Path = studentImage.Path;
     }
 
-    public string ImageName { get; set; }
-    public string Path { get; set; }
+    [IsNotNullOrEmpty] public int ImageId { get; set; }
+    [IsNotNullOrEmpty] public string ImageName { get; set; }
+    [IsNotNullOrEmpty] public string Path { get; set; }
 
     public virtual StudentImage ToImageStudent(ImageStudentRequest imageStudentRequest)
     {

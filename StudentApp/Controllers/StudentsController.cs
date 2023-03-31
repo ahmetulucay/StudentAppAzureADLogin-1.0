@@ -1,12 +1,24 @@
 ﻿
-using LanguageExt.Common;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using StudentApp.Data;
 using StudentApp.Models;
 using StudentApp.Services;
+using System.Text;
 
 namespace StudentApp.Controllers;
+
+//1.ImageStudent, StudentImage/Models --> ICollection'a cevirdim,
+//              hem Add hem de Update kisminda...
+
+//2.Database update deyince hata veriyor.
+//Microsoft.EntityFrameworkCore.Database.Command[20102]
+//Failed executing DbCommand(6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+//      CREATE TABLE[Student] (.........)
+
+//3.Debug yapinca Post metodunda "SaveChangesAsync" cagirinca Exception veriyor.
+//     "ImageId = Null" diyor, Null olmamali diyor.
+
+
 
 //[RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
 //[Authorize]
@@ -46,12 +58,12 @@ public class StudentsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<StudentResponse>> AddStudent(AddStudentRequest addStudentRequest, IFormFile uploadedFile)
+    public async Task<ActionResult<StudentResponse>> AddStudent(AddStudentRequest addStudentRequest)
     {
-        var images = await SaveImageAsync(uploadedFile);
+        //var images = await SaveImageAsync(uploadedFile);
         var request = new AddStudentRequest();
         var student = request.ToStudent(addStudentRequest);
-        if (images is not null) student.ImageStudent = images;
+        //if (images is not null) student.ImageStudent = images;
         var result = await _service.AddStudent(student);
         return Ok(new StudentResponse(result));
     }
@@ -82,22 +94,23 @@ public class StudentsController : ControllerBase
     }
 
     //UploadImage 
-    [HttpPost("UploadImage")]
+    [HttpPut("UploadImage")]
     //[Route("{id}")]
-    public async Task<ActionResult> UploadImage(IFormFile uploadedFile, int id)
+    public async Task<ActionResult> UploadImage(IFormFile uploadedFile, int studentId, int imageId)
     {
-        var result = await _service.GetAsId(id);
-        if (result == null) return NotFound($"Wrong Id {id}");
+        var result = await _service.GetAsId(studentId);
+        if (result == null) return NotFound($"Wrong Id {studentId}");
         try
         {
             //Save image to wwwroot/image
             string wwwRootPath = _webHostEnvironment.WebRootPath;
-            string path = Path.Combine(wwwRootPath + "/Image/", uploadedFile.FileName);
+            string path = Path.Combine(wwwRootPath + "\\Image\\", uploadedFile.FileName);
 
             //Save image path to Db 
-            var si = new StudentImage {Path = path, ImageName = uploadedFile.FileName};
-            result.ImageStudent.Add(si);
-            await _service.UpdateStudent(id, result);
+            result.ImageStudent.ToList().Find(i => i.ImageId == imageId).ImageName = uploadedFile.FileName;
+            result.ImageStudent.ToList().Find(i => i.ImageId == imageId).Path = path;
+
+            await _service.UpdateStudent(studentId, result);
 
             using var stream = new MemoryStream();
             await uploadedFile.CopyToAsync(stream);
@@ -116,6 +129,36 @@ public class StudentsController : ControllerBase
         {
             return NotFound("false: uploading image is not successful");
         }
+    }
+
+    [HttpGet("ExportImage/")]
+    public async Task<FileContentResult> ExportImage(int studentId, int imageId) 
+    {
+
+        //Kontrolleri yap studentId ve imageId icin,  ExportImage resim acilmiyor.
+        //148-149 kapat, 147'i ac, Dene....  RESIM ACMIYORRRRR
+        string contentType = "image/jpg";
+
+        var result = await _service.GetAsId(studentId);
+        if (result == null) return File(Encoding.UTF8.GetBytes(""), contentType, null);
+        var name = result.ImageStudent.ToList().Find(i => i.ImageId == imageId).ImageName;
+        var path = result.ImageStudent.ToList().Find(i => i.ImageId == imageId).Path;
+        //string wwwRootPath = _webHostEnvironment.WebRootPath;
+        //string path = Path.Combine(wwwRootPath + "\\Image\\", name);
+
+
+        //export image
+
+        FileInfo fi = new FileInfo($"{path}");
+        FileStream fs = fi.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
+        StreamReader sr = new StreamReader(fs);
+        string image = sr.ReadToEnd();
+        sr.Close();
+        fs.Close();
+        //var content = Encoding.UTF8.GetBytes(image);
+        byte[] content = Encoding.UTF8.GetBytes(image);
+        return File(content, contentType, name);
+
     }
 
     private async Task<List<StudentImage>> SaveImageAsync(IFormFile uploadedFile)

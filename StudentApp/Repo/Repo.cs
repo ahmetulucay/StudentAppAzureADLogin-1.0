@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using StudentApp.Data;
 using StudentApp.Models;
+using System.Drawing;
 
 namespace StudentApp.Repo;
 
@@ -15,7 +16,10 @@ public class Repo : IRepo
     }
 
     public async Task<List<Students>> Get() =>
-        await _context.Student.Include(s => s.AddressStudent).Include(s => s.EmailAddressStudent).Include(s => s.ImageStudent).Include(s => s.PhoneStudent).ToListAsync();
+        await _context.Student.Include(s => s.AddressStudent)
+        .Include(s => s.EmailAddressStudent)
+        .Include(s => s.ImageStudent)
+        .Include(s => s.PhoneStudent).ToListAsync();
 
     public async Task<Students> GetAsId(int id) =>
         await _context.Student.Include(s => s.AddressStudent).Include(s => s.EmailAddressStudent).Include(s => s.ImageStudent).Include(s => s.PhoneStudent).FirstOrDefaultAsync(s => s.StudentId == id);
@@ -41,12 +45,7 @@ public class Repo : IRepo
             result.PhoneStudent = students.PhoneStudent;
             result.EmailAddressStudent= students.EmailAddressStudent;
             result.AddressStudent = students.AddressStudent;
-            result.ImageStudent.Add(new StudentImage
-            {
-                ImageId = 1,
-                ImageName = students.ImageStudent.First().ImageName, 
-                Path = students.ImageStudent.First().Path
-            }) ;
+            result.ImageStudent = students.ImageStudent;
 
             _context.Student.Update(result);
             await _context.SaveChangesAsync();

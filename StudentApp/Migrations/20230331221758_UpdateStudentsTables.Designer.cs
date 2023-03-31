@@ -12,7 +12,7 @@ using StudentApp.Data;
 namespace StudentApp.Migrations
 {
     [DbContext(typeof(StudentAppContext))]
-    [Migration("20230319230209_UpdateStudentsTables")]
+    [Migration("20230331221758_UpdateStudentsTables")]
     partial class UpdateStudentsTables
     {
         /// <inheritdoc />

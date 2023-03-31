@@ -28,7 +28,6 @@ public class StudentPhoneNo
     public int StudentsId { get; set; }
     public Students Students { get; set; }
 }
-
 public class StudentEmailAddress
 {
     [Key]
