@@ -1,4 +1,5 @@
 ﻿
+using LanguageExt;
 using Microsoft.AspNetCore.Mvc;
 using StudentApp.Data;
 using StudentApp.Models;
@@ -6,19 +7,6 @@ using StudentApp.Services;
 using System.Text;
 
 namespace StudentApp.Controllers;
-
-//1.ImageStudent, StudentImage/Models --> ICollection'a cevirdim,
-//              hem Add hem de Update kisminda...
-
-//2.Database update deyince hata veriyor.
-//Microsoft.EntityFrameworkCore.Database.Command[20102]
-//Failed executing DbCommand(6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
-//      CREATE TABLE[Student] (.........)
-
-//3.Debug yapinca Post metodunda "SaveChangesAsync" cagirinca Exception veriyor.
-//     "ImageId = Null" diyor, Null olmamali diyor.
-
-
 
 //[RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
 //[Authorize]
@@ -135,8 +123,20 @@ public class StudentsController : ControllerBase
     public async Task<FileContentResult> ExportImage(int studentId, int imageId) 
     {
 
-        //Kontrolleri yap studentId ve imageId icin,  ExportImage resim acilmiyor.
-        //148-149 kapat, 147'i ac, Dene....  RESIM ACMIYORRRRR
+        //Ihtimalleri yap studentId ve imageId icin,  ExportImage resim acilmiyor.
+        //133-134 kapat, 132'i ac, Dene....  RESIM ACMIYORRRRR!!!  SONRASINDA YENI BRANCH (AzureBlob)
+
+        //if (!((studentId >= 0) || (imageId >= 0)))
+        //{
+        //    return File(Encoding.UTF8.GetBytes(""), "StudentId and ImageId can't be null or empty.", null);
+        //}
+
+        ////Account number can not be null or empty.
+        //if (string.IsNullOrEmpty(Convert.ToString(Request.Query["accountNumber"])))
+        //{
+        //    return Content("Account number can not be null or empty.");
+        //}
+
         string contentType = "image/jpg";
 
         var result = await _service.GetAsId(studentId);
@@ -146,9 +146,7 @@ public class StudentsController : ControllerBase
         //string wwwRootPath = _webHostEnvironment.WebRootPath;
         //string path = Path.Combine(wwwRootPath + "\\Image\\", name);
 
-
         //export image
-
         FileInfo fi = new FileInfo($"{path}");
         FileStream fs = fi.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
         StreamReader sr = new StreamReader(fs);
@@ -158,7 +156,6 @@ public class StudentsController : ControllerBase
         //var content = Encoding.UTF8.GetBytes(image);
         byte[] content = Encoding.UTF8.GetBytes(image);
         return File(content, contentType, name);
-
     }
 
     private async Task<List<StudentImage>> SaveImageAsync(IFormFile uploadedFile)

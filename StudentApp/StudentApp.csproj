@@ -8,9 +8,14 @@
   </PropertyGroup>
 	
   <ItemGroup>
+    <Content Remove="wwwroot\Image\03.jpg" />
     <Content Remove="wwwroot\Image\0403_1024.jpg" />
+    <Content Remove="wwwroot\Image\1n.jpg" />
     <Content Remove="wwwroot\Image\205774.jpg" />
+    <Content Remove="wwwroot\Image\26.jpg" />
+    <Content Remove="wwwroot\Image\30.jpg" />
     <Content Remove="wwwroot\Image\34SC021.JPG" />
+    <Content Remove="wwwroot\Image\395n.jpg" />
     <Content Remove="wwwroot\Image\487708.jpg" />
   </ItemGroup>
 
