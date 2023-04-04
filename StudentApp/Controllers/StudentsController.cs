@@ -1,6 +1,7 @@
 ﻿
 using LanguageExt;
 using Microsoft.AspNetCore.Mvc;
+using Nest;
 using StudentApp.Data;
 using StudentApp.Models;
 using StudentApp.Services;
@@ -86,18 +87,22 @@ public class StudentsController : ControllerBase
     //[Route("{id}")]
     public async Task<ActionResult> UploadImage(IFormFile uploadedFile, int studentId, int imageId)
     {
+        //student id check
         var result = await _service.GetAsId(studentId);
-        if (result == null) return NotFound($"Wrong Id {studentId}");
+        if (result == null) return NotFound($"Wrong studentId: {studentId}");
         try
         {
             //Save image to wwwroot/image
             string wwwRootPath = _webHostEnvironment.WebRootPath;
             string path = Path.Combine(wwwRootPath + "\\Image\\", uploadedFile.FileName);
 
-            //Save image path to Db 
+            //image id check
+            var imageIdContext = result.ImageStudent.ToList().Find(i => i.StudentsId == studentId).ImageId;
+            if (imageIdContext != imageId) return NotFound($"Wrong imageId: {imageId}");
             result.ImageStudent.ToList().Find(i => i.ImageId == imageId).ImageName = uploadedFile.FileName;
             result.ImageStudent.ToList().Find(i => i.ImageId == imageId).Path = path;
 
+            //Save FileName and path to Db
             await _service.UpdateStudent(studentId, result);
 
             using var stream = new MemoryStream();
@@ -120,62 +125,43 @@ public class StudentsController : ControllerBase
     }
 
     [HttpGet("ExportImage/")]
-    public async Task<FileContentResult> ExportImage(int studentId, int imageId) 
+    public async Task<ActionResult> ExportImage(int studentId, int imageId) 
     {
-
-        //Ihtimalleri yap studentId ve imageId icin,  ExportImage resim acilmiyor.
-        //133-134 kapat, 132'i ac, Dene....  RESIM ACMIYORRRRR!!!  SONRASINDA YENI BRANCH (AzureBlob)
-
-        //if (!((studentId >= 0) || (imageId >= 0)))
-        //{
-        //    return File(Encoding.UTF8.GetBytes(""), "StudentId and ImageId can't be null or empty.", null);
-        //}
-
-        ////Account number can not be null or empty.
-        //if (string.IsNullOrEmpty(Convert.ToString(Request.Query["accountNumber"])))
-        //{
-        //    return Content("Account number can not be null or empty.");
-        //}
 
         string contentType = "image/jpg";
 
+        //student id check
         var result = await _service.GetAsId(studentId);
-        if (result == null) return File(Encoding.UTF8.GetBytes(""), contentType, null);
-        var name = result.ImageStudent.ToList().Find(i => i.ImageId == imageId).ImageName;
-        var path = result.ImageStudent.ToList().Find(i => i.ImageId == imageId).Path;
-        //string wwwRootPath = _webHostEnvironment.WebRootPath;
-        //string path = Path.Combine(wwwRootPath + "\\Image\\", name);
-
-        //export image
-        FileInfo fi = new FileInfo($"{path}");
-        FileStream fs = fi.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
-        StreamReader sr = new StreamReader(fs);
-        string image = sr.ReadToEnd();
-        sr.Close();
-        fs.Close();
-        //var content = Encoding.UTF8.GetBytes(image);
-        byte[] content = Encoding.UTF8.GetBytes(image);
-        return File(content, contentType, name);
-    }
-
-    private async Task<List<StudentImage>> SaveImageAsync(IFormFile uploadedFile)
-    {
-        //Save image to wwwroot/image
-        string wwwRootPath = _webHostEnvironment.WebRootPath;
-        string path = Path.Combine(wwwRootPath + "/Image/", uploadedFile.FileName);
-
-        using var stream = new MemoryStream();
-        await uploadedFile.CopyToAsync(stream);
-        var byteArray = stream.ToArray();
-
-        using (var fs = new FileStream(path, FileMode.Create))
+        if(result == null) return NotFound($"studentId: {studentId}, content-type: {contentType}");
+        try
         {
-            using (BinaryWriter bw = new BinaryWriter(fs)) { bw.Write(byteArray); };
-        }
+            //image id check
+            var imageIdContext = result.ImageStudent.ToList().Find(i => i.StudentsId == studentId).ImageId;
+            if (imageIdContext != imageId) return BadRequest($"Wrong imageId: {imageId}");
+            var name = result.ImageStudent.ToList().Find(i => i.ImageId == imageId).ImageName;
+            var path = result.ImageStudent.ToList().Find(i => i.ImageId == imageId).Path;
 
-        var images = new List<StudentImage>();
-        var studentImage = new StudentImage { ImageName = uploadedFile.FileName, Path = path };
-        images.Add(studentImage);
-        return images;
+            //display image in swagger screen
+
+            var imageFileStream = System.IO.File.OpenRead(path);
+            return File(imageFileStream, "image/jpeg");
+
+            //export image
+
+            //FileInfo fi = new FileInfo($"{path}");
+            //FileStream fs = fi.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
+            //StreamReader sr = new StreamReader(fs);
+            //string image = sr.ReadToEnd();
+            //sr.Close();
+            //fs.Close();
+
+            //var content = Encoding.UTF8.GetBytes(image);
+            ////byte[] content = Encoding.UTF8.GetBytes(image);
+            //return File(content, contentType, name);
+        }
+        catch (Exception ex)
+        {
+            return NotFound("false: exporting image is not successful");
+        }
     }
 }

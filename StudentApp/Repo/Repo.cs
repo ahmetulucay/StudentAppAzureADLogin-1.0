@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using StudentApp.Data;
 using StudentApp.Models;
-using System.Drawing;
 
 namespace StudentApp.Repo;
 
@@ -63,6 +62,17 @@ public class Repo : IRepo
         }
         try
         {
+            //Delete cascade in Db
+            var addresses = _context.StudentAddress.Find(sa => sa.StudentsId == id).ToList();
+            var images = _context.StudentImage.Find(si => si.StudentsId == id).ToList();
+            var phones = _context.StudentPhoneNo.Find(sp => sp.StudentsId == id).ToList();
+            var mails = _context.StudentEmailAddress.Find(se => se.StudentsId == id).ToList();
+
+            _context.StudentAddress.RemoveRange(addresses);
+            _context.StudentImage.RemoveRange(images);
+            _context.StudentPhoneNo.RemoveRange(phones);
+            _context.StudentEmailAddress.RemoveRange(mails);
+
             _context.Student.Remove(result);
             await _context.SaveChangesAsync();
             return true;
