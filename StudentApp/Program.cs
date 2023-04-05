@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using StudentApp.Data;
 using StudentApp.Repo;
 using StudentApp.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 #endregion

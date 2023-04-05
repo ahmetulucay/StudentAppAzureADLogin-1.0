@@ -50,7 +50,6 @@ public class StudentAddress
     public int StudentsId { get; set; }
     public Students Students { get; set; }
 }
-
 public class StudentImage
 {
     [Key]

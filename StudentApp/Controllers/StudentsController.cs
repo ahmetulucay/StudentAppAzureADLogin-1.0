@@ -1,11 +1,9 @@
 ﻿
 using LanguageExt;
 using Microsoft.AspNetCore.Mvc;
-using Nest;
 using StudentApp.Data;
 using StudentApp.Models;
 using StudentApp.Services;
-using System.Text;
 
 namespace StudentApp.Controllers;
 
