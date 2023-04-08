@@ -5,6 +5,7 @@ using StudentApp.Repo;
 using StudentApp.Services;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
+using StudentApp.Configurations;
 #endregion
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
@@ -15,10 +16,15 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     EnvironmentName = Environments.Staging,
     WebRootPath = "wwwroot"
 });
+
+var config = builder.Configuration.Get<AppConfig>();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<StudentAppContext>(option =>
-    option.UseSqlServer(builder.Configuration.GetConnectionString("StudentAppContext") ?? throw new InvalidOperationException("Connection string 'StudentAppContext' not found.")));
+    option.UseSqlServer(config.SqlServer.StudentAppContext ?? throw new InvalidOperationException("Connection string 'StudentAppContext' not found.")));
 //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//    .AddMicrosoftIdentityWebApi(config.AzureAd);
+
+// ex-version
 //    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
 #region AddingServicesToTheContainer
