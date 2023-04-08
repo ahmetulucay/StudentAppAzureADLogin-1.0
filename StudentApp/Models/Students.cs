@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace StudentApp.Models;
 public class Students
 {
-<<<<<<< HEAD
     [Key]
     public int StudentId { get; set; }
     public string UserName { get; set; }
