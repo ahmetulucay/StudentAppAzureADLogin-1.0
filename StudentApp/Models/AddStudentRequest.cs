@@ -14,6 +14,7 @@ public class AddStudentRequest
         SecondName = students.SecondName;
         LastName= students.LastName;   
         School= students.School;
+
         RegistrationDate = students.RegistrationDate;
         PhoneStudent = students.PhoneStudent.Select(p => new PhoneStudentRequest(p)).ToList();
         EmailAddressStudent = students.EmailAddressStudent.Select(p => new EmailAddressStudentRequest(p)).ToList();

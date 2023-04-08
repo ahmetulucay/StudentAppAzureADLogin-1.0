@@ -87,7 +87,11 @@ app.UseSwaggerUI(s =>
 });
 
 app.UseHttpsRedirection();
+<<<<<<< HEAD
 //app.UseAuthentication();
+=======
+
+>>>>>>> StudentAppAzureADAutht
 app.UseAuthorization();
 
 app.MapControllerRoute(
