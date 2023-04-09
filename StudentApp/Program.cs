@@ -24,7 +24,7 @@ builder.Services.AddDbContext<StudentAppContext>(option =>
 //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //    .AddMicrosoftIdentityWebApi(config.AzureAd);
 
-// ex-version
+// ex-version ....
 //    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
 #region AddingServicesToTheContainer
