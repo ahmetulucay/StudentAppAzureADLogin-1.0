@@ -2,7 +2,7 @@
 
 using LanguageExt;
 using Microsoft.AspNetCore.Mvc;
-using StudentApp.Data;
+using StudentApp.Configurations;
 using StudentApp.Models;
 using StudentApp.Services;
 
@@ -16,12 +16,14 @@ public class StudentsController : ControllerBase
 {
     private readonly IService _service;
     private readonly IWebHostEnvironment _webHostEnvironment;
-    private readonly StudentAppContext _context;
-    public StudentsController(IService service, IWebHostEnvironment webHostEnvironment, StudentAppContext context)
+    private readonly IConfiguration _configuration;
+    private readonly string _wwwRootPath;
+    public StudentsController(IConfiguration configuration, IService service, IWebHostEnvironment webHostEnvironment)
     {
         _service = service;
         _webHostEnvironment = webHostEnvironment;
-        _context = context;
+        _configuration = configuration;
+        _wwwRootPath = _webHostEnvironment.WebRootPath;
     }
 
     [HttpGet]
@@ -48,10 +50,8 @@ public class StudentsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<StudentResponse>> AddStudent(AddStudentRequest addStudentRequest)
     {
-        //var images = await SaveImageAsync(uploadedFile);
         var request = new AddStudentRequest();
         var student = request.ToStudent(addStudentRequest);
-        //if (images is not null) student.ImageStudent = images;
         var result = await _service.AddStudent(student);
         return Ok(new StudentResponse(result));
     }
@@ -83,7 +83,6 @@ public class StudentsController : ControllerBase
 
     //UploadImage 
     [HttpPut("UploadImage")]
-    //[Route("{id}")]
     public async Task<ActionResult> UploadImage(IFormFile uploadedFile, int studentId, int imageId)
     {
         //student id check
@@ -92,8 +91,7 @@ public class StudentsController : ControllerBase
         try
         {
             //Save image to wwwroot/image
-            string wwwRootPath = _webHostEnvironment.WebRootPath;
-            string path = Path.Combine(wwwRootPath + "\\Image\\", uploadedFile.FileName);
+            string path = Path.Combine(_wwwRootPath + "\\Image\\", uploadedFile.FileName);
 
             //image id check
             var imageIdContext = result.ImageStudent.ToList().Find(i => i.StudentsId == studentId).ImageId;
@@ -126,37 +124,30 @@ public class StudentsController : ControllerBase
     [HttpGet("ExportImage/")]
     public async Task<ActionResult> ExportImage(int studentId, int imageId) 
     {
-
         string contentType = "image/jpg";
 
         //student id check
         var result = await _service.GetAsId(studentId);
         if(result == null) return NotFound($"studentId: {studentId}, content-type: {contentType}");
+        
         try
         {
             //image id check
             var imageIdContext = result.ImageStudent.ToList().Find(i => i.StudentsId == studentId).ImageId;
-            if (imageIdContext != imageId) return BadRequest($"Wrong imageId: {imageId}");
+            if (imageIdContext != imageId)
+            {          
+                if (_configuration.Get<AppConfig>().AppSettings.IsFakeValue)
+                {
+                    return File(System.IO.File.OpenRead(Path.Combine(_wwwRootPath + "\\Image\\", "1n.jpg")), "image/jpeg");
+                }
+                return BadRequest($"Wrong imageId: {imageId}");
+            }
             var name = result.ImageStudent.ToList().Find(i => i.ImageId == imageId).ImageName;
             var path = result.ImageStudent.ToList().Find(i => i.ImageId == imageId).Path;
 
             //display image in swagger screen
-
             var imageFileStream = System.IO.File.OpenRead(path);
             return File(imageFileStream, "image/jpeg");
-
-            //export image
-
-            //FileInfo fi = new FileInfo($"{path}");
-            //FileStream fs = fi.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
-            //StreamReader sr = new StreamReader(fs);
-            //string image = sr.ReadToEnd();
-            //sr.Close();
-            //fs.Close();
-
-            //var content = Encoding.UTF8.GetBytes(image);
-            ////byte[] content = Encoding.UTF8.GetBytes(image);
-            //return File(content, contentType, name);
         }
         catch (Exception ex)
         {

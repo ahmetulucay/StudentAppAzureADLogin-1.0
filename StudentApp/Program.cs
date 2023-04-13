@@ -5,6 +5,7 @@ using StudentApp.Repo;
 using StudentApp.Services;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
+using StudentApp.Configurations;
 #endregion
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
@@ -15,11 +16,13 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     EnvironmentName = Environments.Staging,
     WebRootPath = "wwwroot"
 });
+
+var config = builder.Configuration.Get<AppConfig>();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<StudentAppContext>(option =>
-    option.UseSqlServer(builder.Configuration.GetConnectionString("StudentAppContext") ?? throw new InvalidOperationException("Connection string 'StudentAppContext' not found.")));
+    option.UseSqlServer(config.SqlServer.StudentAppContext ?? throw new InvalidOperationException("Connection string 'StudentAppContext' not found.")));
 //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+//    .AddMicrosoftIdentityWebApi(config.AzureAd);
 
 #region AddingServicesToTheContainer
 builder.Services.AddControllersWithViews();
@@ -38,7 +41,7 @@ builder.Services.AddControllers()
 builder.Services.AddSwaggerGen(
     c =>
     {
-        c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Swagger Azure AD Demo", Version = "v1" });
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swagger Azure AD Demo", Version = "v1" });
         c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
         {
             Description = "Oauth2.0 which uses AuthorizationCode flow",
@@ -48,11 +51,11 @@ builder.Services.AddSwaggerGen(
             {
                 AuthorizationCode = new OpenApiOAuthFlow
                 {
-                    AuthorizationUrl = new Uri(builder.Configuration["SwaggerAzureAD:AuthorizationUrl"]),
-                    TokenUrl = new Uri(builder.Configuration["SwaggerAzureAD:TokenUrl"]),
+                    AuthorizationUrl = new Uri(config.SwaggerAzureAD.AuthorizationUrl),
+                    TokenUrl = new Uri(config.SwaggerAzureAD.TokenUrl),
                     Scopes = new Dictionary<string, string>
                     {
-                        {builder.Configuration["SwaggerAzureAd:Scope"], "Access API as User"}
+                        {config.SwaggerAzureAD.Scope, "Access API as User"}
                     }
                 }
             }
@@ -64,7 +67,7 @@ builder.Services.AddSwaggerGen(
                 {
                     Reference = new OpenApiReference{Type=ReferenceType.SecurityScheme, Id="oauth2"}
                 },
-                new []{builder.Configuration["SwaggerAzureAd:Scope"]}
+                new []{config.SwaggerAzureAD.Scope}
             }
         });
     });
@@ -81,7 +84,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI(s =>
 {
-    s.OAuthClientId(builder.Configuration["SwaggerAzureAd:ClientId"]);
+    s.OAuthClientId(config.SwaggerAzureAD.ClientId);
     s.OAuthUsePkce();
     s.OAuthScopeSeparator(" ");
 });

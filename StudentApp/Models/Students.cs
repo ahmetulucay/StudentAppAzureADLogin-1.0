@@ -16,7 +16,7 @@ public class Students
     public ICollection<StudentPhoneNo> PhoneStudent { get; set; }
     public ICollection<StudentEmailAddress> EmailAddressStudent { get; set; }
     public ICollection<StudentAddress> AddressStudent { get; set; }
-    public ICollection<StudentImage> ImageStudent { get; set; } /*= new HashSet<StudentImage>();*/
+    public ICollection<StudentImage> ImageStudent { get; set; }
 }
 
 public class StudentPhoneNo
