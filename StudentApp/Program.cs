@@ -24,9 +24,6 @@ builder.Services.AddDbContext<StudentAppContext>(option =>
 //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //    .AddMicrosoftIdentityWebApi(config.AzureAd);
 
-// ex-version ....
-//    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
-
 #region AddingServicesToTheContainer
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
@@ -44,7 +41,7 @@ builder.Services.AddControllers()
 builder.Services.AddSwaggerGen(
     c =>
     {
-        c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Swagger Azure AD Demo", Version = "v1" });
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swagger Azure AD Demo", Version = "v1" });
         c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
         {
             Description = "Oauth2.0 which uses AuthorizationCode flow",
@@ -54,11 +51,11 @@ builder.Services.AddSwaggerGen(
             {
                 AuthorizationCode = new OpenApiOAuthFlow
                 {
-                    AuthorizationUrl = new Uri(builder.Configuration["SwaggerAzureAD:AuthorizationUrl"]),
-                    TokenUrl = new Uri(builder.Configuration["SwaggerAzureAD:TokenUrl"]),
+                    AuthorizationUrl = new Uri(config.SwaggerAzureAD.AuthorizationUrl),
+                    TokenUrl = new Uri(config.SwaggerAzureAD.TokenUrl),
                     Scopes = new Dictionary<string, string>
                     {
-                        {builder.Configuration["SwaggerAzureAd:Scope"], "Access API as User"}
+                        {config.SwaggerAzureAD.Scope, "Access API as User"}
                     }
                 }
             }
@@ -70,7 +67,7 @@ builder.Services.AddSwaggerGen(
                 {
                     Reference = new OpenApiReference{Type=ReferenceType.SecurityScheme, Id="oauth2"}
                 },
-                new []{builder.Configuration["SwaggerAzureAd:Scope"]}
+                new []{config.SwaggerAzureAD.Scope}
             }
         });
     });
@@ -87,7 +84,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI(s =>
 {
-    s.OAuthClientId(builder.Configuration["SwaggerAzureAd:ClientId"]);
+    s.OAuthClientId(config.SwaggerAzureAD.ClientId);
     s.OAuthUsePkce();
     s.OAuthScopeSeparator(" ");
 });

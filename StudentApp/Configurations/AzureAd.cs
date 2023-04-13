@@ -1,4 +1,6 @@
-﻿namespace StudentApp.Configurations;
+﻿
+namespace StudentApp.Configurations;
+
 public class AzureAd
 {
     public string Instance { get; set; } = "https://login.microsoftonline.com/";
