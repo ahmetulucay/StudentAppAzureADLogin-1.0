@@ -1,6 +1,7 @@
 ﻿
 using LanguageExt;
 using Microsoft.AspNetCore.Mvc;
+using StudentApp.AzureStorage;
 using StudentApp.Configurations;
 using StudentApp.Models;
 using StudentApp.Services;
@@ -17,12 +18,14 @@ public class StudentsController : ControllerBase
     private readonly IWebHostEnvironment _webHostEnvironment;
     private readonly IConfiguration _configuration;
     private readonly string _wwwRootPath;
-    public StudentsController(IConfiguration configuration, IService service, IWebHostEnvironment webHostEnvironment)
+    private readonly IStorageService _storageService;
+    public StudentsController(IStorageService storageService, IConfiguration configuration, IService service, IWebHostEnvironment webHostEnvironment)
     {
         _service = service;
         _webHostEnvironment = webHostEnvironment;
         _configuration = configuration;
         _wwwRootPath = _webHostEnvironment.WebRootPath;
+        _storageService = storageService;
     }
 
     [HttpGet]
@@ -89,6 +92,8 @@ public class StudentsController : ControllerBase
         if (result == null) return NotFound($"Wrong studentId: {studentId}");
         try
         {
+            _storageService.Upload(uploadedFile);
+
             //Save image to wwwroot/image
             string path = Path.Combine(_wwwRootPath + "\\Image\\", uploadedFile.FileName);
 
@@ -101,6 +106,7 @@ public class StudentsController : ControllerBase
             //Save FileName and path to Db
             await _service.UpdateStudent(studentId, result);
 
+            /*
             using var stream = new MemoryStream();
             await uploadedFile.CopyToAsync(stream);
             var byteArray = stream.ToArray();
@@ -112,6 +118,7 @@ public class StudentsController : ControllerBase
                     bw.Write(byteArray);
                 };
             }
+            */
             return Ok(new StudentResponse(result));
         }
         catch (Exception ex)

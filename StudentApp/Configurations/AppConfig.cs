@@ -1,4 +1,6 @@
 ﻿
+using Microsoft.Identity.Client.Extensions.Msal;
+
 namespace StudentApp.Configurations;
 
 public class AppConfig
@@ -7,4 +9,5 @@ public class AppConfig
     public AzureAd AzureAd { get; set; }
     public SwaggerAzureAD SwaggerAzureAD { get; set; }
     public AppSettings AppSettings { get; set; }
+    public Storage Storage { get; set; }
 }

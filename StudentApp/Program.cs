@@ -6,6 +6,8 @@ using StudentApp.Services;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 using StudentApp.Configurations;
+using Microsoft.Extensions.Azure;
+using StudentApp.AzureStorage;
 #endregion
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
@@ -23,6 +25,11 @@ builder.Services.AddDbContext<StudentAppContext>(option =>
     option.UseSqlServer(config.SqlServer.StudentAppContext ?? throw new InvalidOperationException("Connection string 'StudentAppContext' not found.")));
 //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //    .AddMicrosoftIdentityWebApi(config.AzureAd);
+
+#region AzureConfig
+builder.Services.AddTransient<IStorageService, StorageService>();
+builder.Services.AddAzureClients(builder => { builder.AddBlobServiceClient(config.Storage.ConnectionString); });
+#endregion
 
 #region AddingServicesToTheContainer
 builder.Services.AddControllersWithViews();
