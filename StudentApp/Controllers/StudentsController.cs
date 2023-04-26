@@ -1,10 +1,13 @@
 ﻿
 using LanguageExt;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client.Extensions.Msal;
 using StudentApp.AzureStorage;
 using StudentApp.Configurations;
 using StudentApp.Models;
 using StudentApp.Services;
+using System.Dynamic;
 
 namespace StudentApp.Controllers;
 
@@ -154,6 +157,28 @@ public class StudentsController : ControllerBase
             //display image in swagger screen
             var imageFileStream = System.IO.File.OpenRead(path);
             return File(imageFileStream, "image/jpeg");
+
+            //BlobContainerClient – Download File or Blob from Azure
+
+            //1.Get a connectionString
+            //string connectionString = configuration["BlobConnectionString"];
+
+            //2.Get a blobName
+            //string blobName = configuration["BlobName"];
+
+            //3.Get a containerName
+            //string containerName = configuration["ContainerName"];
+
+            //4.Get a reference to a container (f.exp. name = "imagefilecontainer")
+            //BlobContainerClient container = new BlobContainerClient(connectionString, containerName);
+
+            //5.Get a reference to a blob
+            //BlobClient blob = container.GetBlobClient(blobName);
+
+            //6.Download file to a given path from Azure storage
+            //await blob.DownloadToAsync(downloadPath);
+
+
         }
         catch (Exception ex)
         {
