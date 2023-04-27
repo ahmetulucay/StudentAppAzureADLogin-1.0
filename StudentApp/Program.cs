@@ -8,6 +8,7 @@ using System.Text.Json.Serialization;
 using StudentApp.Configurations;
 using Microsoft.Extensions.Azure;
 using StudentApp.AzureStorage;
+using Serilog;
 #endregion
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
@@ -18,6 +19,12 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     EnvironmentName = Environments.Staging,
     WebRootPath = "wwwroot"
 });
+var logger = new LoggerConfiguration()
+  .ReadFrom.Configuration(builder.Configuration)
+  .Enrich.FromLogContext()
+  .CreateLogger();
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
 
 var config = builder.Configuration.Get<AppConfig>();
 builder.Services.AddControllers();

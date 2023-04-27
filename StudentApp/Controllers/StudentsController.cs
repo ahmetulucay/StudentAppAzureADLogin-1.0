@@ -1,13 +1,10 @@
 ﻿
 using LanguageExt;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client.Extensions.Msal;
 using StudentApp.AzureStorage;
 using StudentApp.Configurations;
 using StudentApp.Models;
 using StudentApp.Services;
-using System.Dynamic;
 
 namespace StudentApp.Controllers;
 
@@ -22,13 +19,15 @@ public class StudentsController : ControllerBase
     private readonly IConfiguration _configuration;
     private readonly string _wwwRootPath;
     private readonly IStorageService _storageService;
-    public StudentsController(IStorageService storageService, IConfiguration configuration, IService service, IWebHostEnvironment webHostEnvironment)
+    private readonly ILogger<StudentsController> _logger;
+    public StudentsController(IStorageService storageService, IConfiguration configuration, IService service, IWebHostEnvironment webHostEnvironment, ILogger<StudentsController> logger)
     {
         _service = service;
         _webHostEnvironment = webHostEnvironment;
         _configuration = configuration;
         _wwwRootPath = _webHostEnvironment.WebRootPath;
         _storageService = storageService;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -36,7 +35,11 @@ public class StudentsController : ControllerBase
     {
         var students = new List<StudentResponse>();
         var result = await _service.Get();
-        if (result is null)  return Ok(students);
+        if (result is null)
+        {
+            _logger.LogDebug("Can't get students data from the service.");
+            return Ok(students);
+        }
         for (var i = 0; i < result.Count;i++)
         {
             students.Add(new StudentResponse(result[i]));
@@ -48,7 +51,11 @@ public class StudentsController : ControllerBase
     public async Task<ActionResult<StudentResponse>> GetAsId(int id)
     {
         var result = await _service.GetAsId(id);
-        if (result == null) return NotFound($"Wrong Id {id}");
+        if (result == null)
+        {
+            _logger.LogWarning($"Wrong student id:{id}.");
+            return NotFound($"Wrong Id {id}");
+        }
         return Ok(new StudentResponse(result));
     }
 
@@ -70,7 +77,10 @@ public class StudentsController : ControllerBase
         var result = await _service.UpdateStudent(id, student);
 
         if (result == null)
+        {
+            _logger.LogWarning($"Wrong student id:{id}.");
             return NotFound($"Wrong Id {id}");
+        }
         return Ok(new StudentResponse(result));
     }
 
@@ -79,10 +89,16 @@ public class StudentsController : ControllerBase
     public async Task<ActionResult<bool?>> DeleteStudent(int id)
     {
         var result = await _service.DeleteStudent(id);
-        if (result == null)
-            return NotFound($"False: Wrong Id {id}");
+        if (result == null) 
+        {
+            _logger.LogWarning($"Wrong student id:{id}.");
+            return NotFound($"False: Wrong Id {id}"); 
+        }
         if (result == false)
+        {
+            _logger.LogError($"Deleting student id:{id} is NOT successful");
             return NotFound($"False: Deleting Id {id} is NOT successful");
+        }
         return Ok($"True: Deleting Id {id} is successful");
     }
 
@@ -92,17 +108,26 @@ public class StudentsController : ControllerBase
     {
         //student id check
         var result = await _service.GetAsId(studentId);
-        if (result == null) return NotFound($"Wrong studentId: {studentId}");
+        if (result == null)
+        {
+            _logger.LogWarning($"Wrong student id:{studentId}.");
+            return NotFound($"Wrong studentId: {studentId}");
+        }
         try
         {
             _storageService.Upload(uploadedFile);
 
             //Save image to wwwroot/image
+            _logger.LogInformation("Creating path for file.");
             string path = Path.Combine(_wwwRootPath + "\\Image\\", uploadedFile.FileName);
 
             //image id check
             var imageIdContext = result.ImageStudent.ToList().Find(i => i.StudentsId == studentId).ImageId;
-            if (imageIdContext != imageId) return NotFound($"Wrong imageId: {imageId}");
+            if (imageIdContext != imageId)
+            {
+                _logger.LogWarning($"Wrong image id:{imageId}.");
+                return NotFound($"Wrong imageId: {imageId}");
+            }
             result.ImageStudent.ToList().Find(i => i.ImageId == imageId).ImageName = uploadedFile.FileName;
             result.ImageStudent.ToList().Find(i => i.ImageId == imageId).Path = path;
 
@@ -126,6 +151,7 @@ public class StudentsController : ControllerBase
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "We caught this 'uploading image exception'.");
             return NotFound("false: uploading image is not successful");
         }
     }
@@ -137,8 +163,12 @@ public class StudentsController : ControllerBase
 
         //student id check
         var result = await _service.GetAsId(studentId);
-        if(result == null) return NotFound($"studentId: {studentId}, content-type: {contentType}");
-        
+        if(result == null)
+        {
+            _logger.LogWarning("Wrong student id attempt.");
+            return NotFound($"studentId: {studentId}, content-type: {contentType}");
+        }
+
         try
         {
             //image id check
@@ -182,6 +212,7 @@ public class StudentsController : ControllerBase
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "We caught this 'exporting image exception'.");
             return NotFound("false: exporting image is not successful");
         }
     }
