@@ -37,7 +37,7 @@ public class StudentsController : ControllerBase
         var result = await _service.Get();
         if (result is null)
         {
-            _logger.LogDebug("Can't get students data from the service.");
+            _logger.LogDebug("Students data not retrieved from the service.");
             return Ok(students);
         }
         for (var i = 0; i < result.Count;i++)
@@ -125,7 +125,7 @@ public class StudentsController : ControllerBase
             var imageIdContext = result.ImageStudent.ToList().Find(i => i.StudentsId == studentId).ImageId;
             if (imageIdContext != imageId)
             {
-                _logger.LogWarning($"Wrong image id:{imageId}.");
+                _logger.LogWarning("Wrong image id:{imageId}", imageId);
                 return NotFound($"Wrong imageId: {imageId}");
             }
             result.ImageStudent.ToList().Find(i => i.ImageId == imageId).ImageName = uploadedFile.FileName;
@@ -151,7 +151,7 @@ public class StudentsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "We caught this 'uploading image exception'.");
+            _logger.LogError(ex, "Uploading image exception.");
             return NotFound("false: uploading image is not successful");
         }
     }
@@ -165,7 +165,7 @@ public class StudentsController : ControllerBase
         var result = await _service.GetAsId(studentId);
         if(result == null)
         {
-            _logger.LogWarning("Wrong student id attempt.");
+            _logger.LogWarning("Wrong student id:{studentId}", studentId);
             return NotFound($"studentId: {studentId}, content-type: {contentType}");
         }
 
@@ -179,7 +179,7 @@ public class StudentsController : ControllerBase
                 {
                     return File(System.IO.File.OpenRead(Path.Combine(_wwwRootPath + "\\Image\\", "1n.jpg")), "image/jpeg");
                 }
-                return BadRequest($"Wrong imageId: {imageId}");
+                return BadRequest($"Wrong imageId:{imageId}");
             }
             var name = result.ImageStudent.ToList().Find(i => i.ImageId == imageId).ImageName;
             var path = result.ImageStudent.ToList().Find(i => i.ImageId == imageId).Path;
@@ -212,7 +212,7 @@ public class StudentsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "We caught this 'exporting image exception'.");
+            _logger.LogError(ex, "Exporting image exception.");
             return NotFound("false: exporting image is not successful");
         }
     }

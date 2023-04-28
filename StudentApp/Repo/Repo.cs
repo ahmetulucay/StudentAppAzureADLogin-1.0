@@ -81,7 +81,7 @@ public class Repo : IRepo
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "We caught a deleting student data ('db cascade') from context.");
+            _logger.LogError(ex, "Deleting student data ('db cascade') from context exception.");
             return false;
         }
     }
