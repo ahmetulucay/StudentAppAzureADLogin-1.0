@@ -19,14 +19,20 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     EnvironmentName = Environments.Staging,
     WebRootPath = "wwwroot"
 });
+
+#region SeriLog
 var logger = new LoggerConfiguration()
   .ReadFrom.Configuration(builder.Configuration)
   .Enrich.FromLogContext()
   .CreateLogger();
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
+#endregion
 
+#region AppConfig
 var config = builder.Configuration.Get<AppConfig>();
+#endregion
+
 builder.Services.AddControllers();
 builder.Services.AddDbContext<StudentAppContext>(option =>
     option.UseSqlServer(config.SqlServer.StudentAppContext ?? throw new InvalidOperationException("Connection string 'StudentAppContext' not found.")));
@@ -87,14 +93,15 @@ builder.Services.AddSwaggerGen(
     });
 #endregion
 
-// Add interfaces (Context)
+#region Add Interfaces (Context)
 builder.Services.AddTransient<IService, Service>();
 builder.Services.AddTransient<IRepo, Repo>();
+#endregion
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-#region Pipeline
+//Configure the HTTP request pipeline.
+#region Swagger
 app.UseSwagger();
 app.UseSwaggerUI(s =>
 {
@@ -102,14 +109,12 @@ app.UseSwaggerUI(s =>
     s.OAuthUsePkce();
     s.OAuthScopeSeparator(" ");
 });
+#endregion
 
 app.UseHttpsRedirection();
 //app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
+    name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 app.Run();
-#endregion

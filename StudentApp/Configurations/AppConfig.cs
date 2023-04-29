@@ -1,6 +1,4 @@
 ﻿
-using Microsoft.Identity.Client.Extensions.Msal;
-
 namespace StudentApp.Configurations;
 
 public class AppConfig
