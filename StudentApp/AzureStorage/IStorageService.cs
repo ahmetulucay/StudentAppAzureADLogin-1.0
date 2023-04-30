@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
+﻿
 namespace StudentApp.AzureStorage;
 
 public interface IStorageService 

@@ -40,11 +40,14 @@ public class StudentsController : ControllerBase
             _logger.LogDebug("Students data not retrieved from the service.");
             return Ok(students);
         }
-        for (var i = 0; i < result.Count;i++)
+        else
         {
-            students.Add(new StudentResponse(result[i]));
+            for (var i = 0; i < result.Count; i++)
+            {
+                students.Add(new StudentResponse(result[i]));
+            }
+            return Ok(students);
         }
-        return Ok(students);
     }
 
     [HttpGet("GetAsId/")]

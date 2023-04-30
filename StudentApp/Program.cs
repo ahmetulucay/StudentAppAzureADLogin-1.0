@@ -24,6 +24,7 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 var logger = new LoggerConfiguration()
   .ReadFrom.Configuration(builder.Configuration)
   .Enrich.FromLogContext()
+  .WriteTo.Console()
   .CreateLogger();
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
@@ -39,7 +40,7 @@ builder.Services.AddDbContext<StudentAppContext>(option =>
 //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //    .AddMicrosoftIdentityWebApi(config.AzureAd);
 
-#region AzureConfig
+#region AzureBlob
 builder.Services.AddTransient<IStorageService, StorageService>();
 builder.Services.AddAzureClients(builder => { builder.AddBlobServiceClient(config.Storage.ConnectionString); });
 #endregion
@@ -115,6 +116,7 @@ app.UseHttpsRedirection();
 //app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapDefaultControllerRoute();
+//app.MapControllerRoute(
+//    name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 app.Run();
