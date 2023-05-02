@@ -24,6 +24,7 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 var logger = new LoggerConfiguration()
   .ReadFrom.Configuration(builder.Configuration)
   .Enrich.FromLogContext()
+  //.WriteTo.File()
   .WriteTo.Console()
   .CreateLogger();
 builder.Logging.ClearProviders();
@@ -41,8 +42,8 @@ builder.Services.AddDbContext<StudentAppContext>(option =>
 //    .AddMicrosoftIdentityWebApi(config.AzureAd);
 
 #region AzureBlob
-builder.Services.AddTransient<IStorageService, StorageService>();
-builder.Services.AddAzureClients(builder => { builder.AddBlobServiceClient(config.Storage.ConnectionString); });
+//builder.Services.AddTransient<IStorageService, StorageService>();
+//builder.Services.AddAzureClients(builder => { builder.AddBlobServiceClient(config.Storage.ConnectionString); });
 #endregion
 
 #region AddingServicesToTheContainer

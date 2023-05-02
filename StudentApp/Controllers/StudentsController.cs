@@ -18,15 +18,15 @@ public class StudentsController : ControllerBase
     private readonly IWebHostEnvironment _webHostEnvironment;
     private readonly IConfiguration _configuration;
     private readonly string _wwwRootPath;
-    private readonly IStorageService _storageService;
+    //private readonly IStorageService _storageService;
     private readonly ILogger<StudentsController> _logger;
-    public StudentsController(IStorageService storageService, IConfiguration configuration, IService service, IWebHostEnvironment webHostEnvironment, ILogger<StudentsController> logger)
+    public StudentsController(IConfiguration configuration, IService service, IWebHostEnvironment webHostEnvironment, ILogger<StudentsController> logger)
     {
         _service = service;
         _webHostEnvironment = webHostEnvironment;
         _configuration = configuration;
         _wwwRootPath = _webHostEnvironment.WebRootPath;
-        _storageService = storageService;
+        //_storageService = storageService;
         _logger = logger;
     }
 
@@ -118,7 +118,7 @@ public class StudentsController : ControllerBase
         }
         try
         {
-            _storageService.Upload(uploadedFile);
+            //_storageService.Upload(uploadedFile);
 
             //Save image to wwwroot/image
             _logger.LogInformation("Creating path for file.");
@@ -137,7 +137,7 @@ public class StudentsController : ControllerBase
             //Save FileName and path to Db
             await _service.UpdateStudent(studentId, result);
 
-            /*
+
             using var stream = new MemoryStream();
             await uploadedFile.CopyToAsync(stream);
             var byteArray = stream.ToArray();
@@ -149,7 +149,7 @@ public class StudentsController : ControllerBase
                     bw.Write(byteArray);
                 };
             }
-            */
+
             return Ok(new StudentResponse(result));
         }
         catch (Exception ex)
