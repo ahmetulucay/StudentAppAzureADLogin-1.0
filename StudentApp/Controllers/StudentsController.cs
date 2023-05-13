@@ -46,6 +46,8 @@ public class StudentsController : ControllerBase
             {
                 students.Add(new StudentResponse(result[i]));
             }
+            _logger.LogInformation("---------------------------------------------TEST------------------------------------------");
+            _logger.LogInformation("Students data retrieved from the service.");
             return Ok(students);
         }
     }
