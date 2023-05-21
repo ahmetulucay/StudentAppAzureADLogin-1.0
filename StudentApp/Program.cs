@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using StudentApp.Data;
 using StudentApp.Repo;
 using StudentApp.Services;
+using StudentApp.GrpcService;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 using StudentApp.Configurations;
@@ -95,6 +96,11 @@ builder.Services.AddSwaggerGen(
     });
 #endregion
 
+#region Proto/Grpc
+builder.Services.AddGrpc();
+builder.Services.AddGrpcReflection();
+#endregion
+
 #region Add Interfaces (Context)
 builder.Services.AddTransient<IService, Service>();
 builder.Services.AddTransient<IRepo, Repo>();
@@ -111,6 +117,12 @@ app.UseSwaggerUI(s =>
     s.OAuthUsePkce();
     s.OAuthScopeSeparator(" ");
 });
+#endregion
+
+#region GrpcConfiguration
+//app.UseGrpcWeb();
+app.MapGrpcService<MessageGrpcService>();
+app.MapGrpcReflectionService();
 #endregion
 
 app.UseHttpsRedirection();

@@ -45,4 +45,18 @@
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
+	<ItemGroup>
+		<PackageReference Include="Google.Protobuf" Version="3.23.1" />
+		<PackageReference Include="Grpc.Core" Version="2.46.6" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.53.0" />
+		<PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.53.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.54.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+		<Protobuf Include="Protos\message.proto" GrpcService="Server" />
+	</ItemGroup>
+
 </Project>

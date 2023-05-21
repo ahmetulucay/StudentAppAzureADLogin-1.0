@@ -1,10 +1,8 @@
 syntax = "proto3";
 
-option csharp_namespace = "StudentApp";
+option csharp_namespace = "GrpcMessage";
 
 package message;
-
-import "google/api/annotations.proto";
 
 service Message {
   rpc GetMessage (GetMessageRequest) returns (GetMessageResponse);
