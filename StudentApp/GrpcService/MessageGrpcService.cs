@@ -1,6 +1,7 @@
 ﻿
 using Azure;
 using Grpc.Core;
+using Nest;
 using StudentApp.Models;
 using StudentApp.Services;
 
@@ -41,6 +42,44 @@ public class MessageGrpcService : GrpcMessage.Message.MessageBase
 
         }
     }
+
+    public override async Task GetStudent(GrpcMessage.GetStudentRequest request, IServerStreamWriter<GrpcMessage.GetStudentResponse> responseStream, ServerCallContext context)
+    {
+        var result = await _service.GetAsId((int)request.Id);
+        if (result == null)
+        {
+            _logger.LogWarning($"Wrong student id:{result.StudentId}.");
+        }
+        else
+        {
+            await responseStream.WriteAsync(new GrpcMessage.GetStudentResponse
+            {
+                Id = result.StudentId,
+                FirstName = result.FirstName,
+                SecondName = result.LastName,
+                LastName = result.LastName,
+                UserName = result.UserName,
+                School = result.School
+            });
+        }
+    }
+
+    public async Task AddStudent(IServerStreamWriter<GrpcMessage.AddStudentRequestMGS> requestStream, IServerStreamWriter<GrpcMessage.AddStudentResponseMGS> responseStream, AddStudentRequest addStudentRequest, ServerCallContext context)
+    {
+        var request = new AddStudentRequest();
+        var student = request.ToStudent(addStudentRequest);
+        var result = await _service.AddStudent(student);
+        await responseStream.WriteAsync(new GrpcMessage.AddStudentResponseMGS
+        {
+            Id = result.StudentId,
+            UserName = result.UserName,
+            FirstName = result.FirstName,
+            SecondName = result.SecondName,
+            LastName = result.LastName,
+            School = result.School
+        });
+    }
+
 
     public override async Task GetAllMessages(GrpcMessage.GetAllMessagesRequest request, IServerStreamWriter<GrpcMessage.GetAllMessagesResponse> responseStream, ServerCallContext context)
     {
