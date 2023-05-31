@@ -8,10 +8,12 @@ namespace StudentApp.Repo;
 public class Repo : IRepo
 {
     private readonly StudentAppContext _context;
+    private readonly ILogger<StudentAppContext> _logger;
 
-    public Repo(StudentAppContext context)
+    public Repo(StudentAppContext context, ILogger<StudentAppContext> logger)
     {
         _context = context;
+        _logger = logger;
     }
 
     public async Task<List<Students>> Get() =>
@@ -77,8 +79,9 @@ public class Repo : IRepo
             await _context.SaveChangesAsync();
             return true;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Deleting student data ('db cascade') from context exception.");
             return false;
         }
     }

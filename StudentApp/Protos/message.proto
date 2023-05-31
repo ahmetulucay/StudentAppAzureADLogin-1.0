@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcMessage";
+
+package message;
+
+service Message {
+  rpc GetAllStudents (GetAllStudentsRequest) returns (stream GetAllStudentsResponse);
+  rpc GetMessage (GetMessageRequest) returns (GetMessageResponse);
+  rpc SendMessage (SendMessageRequest) returns (SendMessageResponse);
+  rpc GetAllMessages(GetAllMessagesRequest) returns (stream GetAllMessagesResponse);
+}
+
+message GetAllStudentsRequest {}
+
+message GetAllStudentsResponse {
+    int64 id = 1;
+    string UserName = 2;
+    string FirstName = 3;
+    string SecondName = 4;
+    string LastName = 5;
+    string School = 6;
+}
+
+  
+message GetAllMessagesRequest {}
+
+message GetAllMessagesResponse
+{
+    int64 id = 1;
+    string from = 2;
+    string to = 3;
+    string message = 4;
+}
+
+message GetMessageRequest 
+{
+    int64 id = 1;
+}
+
+message GetMessageResponse
+{
+    GetAllMessagesResponse response = 1;
+}
+
+message SendMessageRequest 
+{
+    int64 id = 1;
+    string from = 2;
+    string to = 3;
+    string message = 4;
+}
+
+message SendMessageResponse
+{
+    int64 id = 1;
+}
+

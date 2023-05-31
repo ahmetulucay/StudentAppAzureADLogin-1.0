@@ -3,9 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using StudentApp.Data;
 using StudentApp.Repo;
 using StudentApp.Services;
+using StudentApp.GrpcService;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 using StudentApp.Configurations;
+using Microsoft.Extensions.Azure;
+using StudentApp.AzureStorage;
+using Serilog;
 #endregion
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
@@ -17,12 +21,31 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     WebRootPath = "wwwroot"
 });
 
+#region SeriLog
+var logger = new LoggerConfiguration()
+  .ReadFrom.Configuration(builder.Configuration)
+  .Enrich.FromLogContext()
+  //.WriteTo.File()
+  .WriteTo.Console()
+  .CreateLogger();
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
+#endregion
+
+#region AppConfig
 var config = builder.Configuration.Get<AppConfig>();
+#endregion
+
 builder.Services.AddControllers();
 builder.Services.AddDbContext<StudentAppContext>(option =>
     option.UseSqlServer(config.SqlServer.StudentAppContext ?? throw new InvalidOperationException("Connection string 'StudentAppContext' not found.")));
 //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //    .AddMicrosoftIdentityWebApi(config.AzureAd);
+
+#region AzureBlob
+//builder.Services.AddTransient<IStorageService, StorageService>();
+//builder.Services.AddAzureClients(builder => { builder.AddBlobServiceClient(config.Storage.ConnectionString); });
+#endregion
 
 #region AddingServicesToTheContainer
 builder.Services.AddControllersWithViews();
@@ -73,14 +96,20 @@ builder.Services.AddSwaggerGen(
     });
 #endregion
 
-// Add interfaces (Context)
+#region Proto/Grpc
+builder.Services.AddGrpc();
+builder.Services.AddGrpcReflection();
+#endregion
+
+#region Add Interfaces (Context)
 builder.Services.AddTransient<IService, Service>();
 builder.Services.AddTransient<IRepo, Repo>();
+#endregion
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-#region Pipeline
+//Configure the HTTP request pipeline.
+#region Swagger
 app.UseSwagger();
 app.UseSwaggerUI(s =>
 {
@@ -88,14 +117,19 @@ app.UseSwaggerUI(s =>
     s.OAuthUsePkce();
     s.OAuthScopeSeparator(" ");
 });
+#endregion
+
+#region GrpcConfiguration
+//app.UseGrpcWeb();
+app.MapGrpcService<MessageGrpcService>();
+app.MapGrpcReflectionService();
+#endregion
 
 app.UseHttpsRedirection();
 //app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
+app.MapDefaultControllerRoute();
+//app.MapControllerRoute(
+//    name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 app.Run();
-#endregion
