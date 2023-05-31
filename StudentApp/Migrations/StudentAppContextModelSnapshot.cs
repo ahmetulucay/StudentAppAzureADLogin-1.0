@@ -172,6 +172,7 @@ namespace StudentApp.Migrations
                     b.HasOne("StudentApp.Models.Students", "Students")
                         .WithMany("EmailAddressStudent")
                         .HasForeignKey("StudentsId");
+<<<<<<< HEAD
 
                     b.Navigation("Students");
                 });
@@ -181,6 +182,8 @@ namespace StudentApp.Migrations
                     b.HasOne("StudentApp.Models.Students", "Students")
                         .WithMany("ImageStudent")
                         .HasForeignKey("StudentsId");
+=======
+>>>>>>> StudentAppAzureADAutht
 
                     b.Navigation("Students");
                 });
