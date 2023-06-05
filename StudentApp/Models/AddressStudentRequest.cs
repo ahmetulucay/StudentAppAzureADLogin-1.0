@@ -18,8 +18,7 @@ public class AddressStudentRequest
         PostNumber = studentAddress.PostNumber;
         Country= studentAddress.Country;
     }
-
-    [IsNotNullOrEmpty] public string Address{ get; set; }
+    [IsNotNullOrEmpty] public string Address { get; set; }
     [IsNotNullOrEmpty] public string City { get; set; }
     [IsNotNullOrEmpty] public int PostNumber { get; set; }
     [IsNotNullOrEmpty] public string Country { get; set; }
@@ -39,10 +38,10 @@ public class AddressStudentRequest
     {
         return new StudentAddress
         {
-                Address= Address,
-                City = City,
-                PostNumber = PostNumber,
-                Country = Country
+            Address = Address,
+            City = City,
+            PostNumber = PostNumber,
+            Country = Country
         };
     }
 }
