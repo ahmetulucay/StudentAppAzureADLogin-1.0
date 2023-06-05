@@ -1,9 +1,13 @@
 ﻿
 using Azure;
 using Grpc.Core;
+using GrpcMessage;
+using LanguageExt.Common;
 using Nest;
 using StudentApp.Models;
 using StudentApp.Services;
+using System;
+using AddStudentRequest = StudentApp.Models.AddStudentRequest;
 
 namespace StudentApp.GrpcService;
 
@@ -64,22 +68,38 @@ public class MessageGrpcService : GrpcMessage.Message.MessageBase
         }
     }
 
-    public async Task AddStudent(IServerStreamWriter<GrpcMessage.AddStudentRequestMGS> requestStream, IServerStreamWriter<GrpcMessage.AddStudentResponseMGS> responseStream, AddStudentRequest addStudentRequest, ServerCallContext context)
+    public override async Task<AddStudentResponse> AddStudent(GrpcMessage.AddStudentRequest request, ServerCallContext context)
     {
-        var request = new AddStudentRequest();
-        var student = request.ToStudent(addStudentRequest);
-        var result = await _service.AddStudent(student);
-        await responseStream.WriteAsync(new GrpcMessage.AddStudentResponseMGS
+        var requestDB = new AddStudentRequest();
+        
+        var student = new AddStudentRequest
         {
-            Id = result.StudentId,
-            UserName = result.UserName,
-            FirstName = result.FirstName,
-            SecondName = result.SecondName,
-            LastName = result.LastName,
-            School = result.School
-        });
-    }
+            UserName = request.UserName,
+            FirstName = request.FirstName, 
+            SecondName = request.SecondName,
+            LastName = request.LastName,
+            School = request.School,
+            RegistrationDate = DateTime.UtcNow,
+            PhoneStudent = new List<PhoneStudentRequest>(),
+            AddressStudent = new List<AddressStudentRequest>(),
+            ImageStudent   = new List<ImageStudentRequest>(),
+            EmailAddressStudent = new List<EmailAddressStudentRequest>()
+        };
 
+        var studentDB = requestDB.ToStudent(student);
+
+        var result = await _service.AddStudent(studentDB);
+        if (result == null)
+        {
+            _logger.LogWarning("Wrong student data");
+            return new AddStudentResponse();
+        }
+        else
+        {
+            _logger.LogInformation("Student added in the database");
+            return new AddStudentResponse();
+        }
+    }
 
     public override async Task GetAllMessages(GrpcMessage.GetAllMessagesRequest request, IServerStreamWriter<GrpcMessage.GetAllMessagesResponse> responseStream, ServerCallContext context)
     {

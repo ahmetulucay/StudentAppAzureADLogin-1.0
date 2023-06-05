@@ -7,7 +7,8 @@ package message;
 service Message {
   rpc GetAllStudents (GetAllStudentsRequest) returns (stream GetAllStudentsResponse);
   rpc GetStudent (GetStudentRequest) returns (stream GetStudentResponse);
-  rpc AddStudent (stream AddStudentRequestMGS) returns (AddStudentResponseMGS);
+  rpc AddStudent (AddStudentRequest) returns (AddStudentResponse);
+  rpc UpdateStudent (UpdateStudentRequest) returns (UpdateStudentResponse);
 
   rpc GetMessage (GetMessageRequest) returns (GetMessageResponse);
   rpc SendMessage (SendMessageRequest) returns (SendMessageResponse);
@@ -38,9 +39,8 @@ message GetStudentResponse{
     string School = 6;
 }
 
-message AddStudentRequestMGS {}
-message AddStudentResponseMGS 
-{    
+message AddStudentRequest 
+{
     int64 id = 1;
     string UserName = 2;
     string FirstName = 3;
@@ -48,7 +48,18 @@ message AddStudentResponseMGS
     string LastName = 5;
     string School = 6;
 }
-  
+message AddStudentResponse {}
+
+message UpdateStudentRequest 
+{
+    int64 id = 1;
+    string UserName = 2;
+    string FirstName = 3;
+    string SecondName = 4;
+    string LastName = 5;
+    string School = 6;
+}
+message UpdateStudentResponse {}
 
 
 message GetAllMessagesRequest {}
