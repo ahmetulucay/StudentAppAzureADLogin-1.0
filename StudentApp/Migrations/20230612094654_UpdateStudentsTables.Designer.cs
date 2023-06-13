@@ -12,13 +12,8 @@ using StudentApp.Data;
 namespace StudentApp.Migrations
 {
     [DbContext(typeof(StudentAppContext))]
-<<<<<<<< HEAD:StudentApp/Migrations/20230331221758_UpdateStudentsTables.Designer.cs
-    [Migration("20230331221758_UpdateStudentsTables")]
+    [Migration("20230612094654_UpdateStudentsTables")]
     partial class UpdateStudentsTables
-========
-    [Migration("20230308211741_UpdateStudentsAddressTables")]
-    partial class UpdateStudentsAddressTables
->>>>>>>> StudentAppAzureADAutht:StudentApp/Migrations/20230308211741_UpdateStudentsAddressTables.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -183,7 +178,6 @@ namespace StudentApp.Migrations
                     b.HasOne("StudentApp.Models.Students", "Students")
                         .WithMany("EmailAddressStudent")
                         .HasForeignKey("StudentsId");
-<<<<<<<< HEAD:StudentApp/Migrations/20230331221758_UpdateStudentsTables.Designer.cs
 
                     b.Navigation("Students");
                 });
@@ -193,8 +187,6 @@ namespace StudentApp.Migrations
                     b.HasOne("StudentApp.Models.Students", "Students")
                         .WithMany("ImageStudent")
                         .HasForeignKey("StudentsId");
-========
->>>>>>>> StudentAppAzureADAutht:StudentApp/Migrations/20230308211741_UpdateStudentsAddressTables.Designer.cs
 
                     b.Navigation("Students");
                 });

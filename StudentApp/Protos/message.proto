@@ -9,6 +9,8 @@ service Message {
   rpc GetStudent (GetStudentRequest) returns (stream GetStudentResponse);
   rpc AddStudent (AddStudentRequest) returns (AddStudentResponse);
   rpc UpdateStudent (UpdateStudentRequest) returns (UpdateStudentResponse);
+  rpc DeleteStudent (DeleteStudentRequest) returns (DeleteStudentResponse);
+
 
   rpc GetMessage (GetMessageRequest) returns (GetMessageResponse);
   rpc SendMessage (SendMessageRequest) returns (SendMessageResponse);
@@ -47,8 +49,14 @@ message AddStudentRequest
     string SecondName = 4;
     string LastName = 5;
     string School = 6;
+    repeated PhoneNo PhoneNumber = 7;
 }
-message AddStudentResponse {}
+message AddStudentResponse{}
+
+message PhoneNo
+{
+    string PhoneNumber = 1;
+}
 
 message UpdateStudentRequest 
 {
@@ -60,6 +68,13 @@ message UpdateStudentRequest
     string School = 6;
 }
 message UpdateStudentResponse {}
+
+message DeleteStudentRequest 
+{
+    int64 id = 1;
+}
+message DeleteStudentResponse{}
+
 
 
 message GetAllMessagesRequest {}

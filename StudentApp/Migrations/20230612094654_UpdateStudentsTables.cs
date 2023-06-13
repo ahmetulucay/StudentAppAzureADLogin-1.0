@@ -6,11 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace StudentApp.Migrations
 {
     /// <inheritdoc />
-<<<<<<<< HEAD:StudentApp/Migrations/20230331221758_UpdateStudentsTables.cs
     public partial class UpdateStudentsTables : Migration
-========
-    public partial class UpdateStudentsAddressTables : Migration
->>>>>>>> StudentAppAzureADAutht:StudentApp/Migrations/20230308211741_UpdateStudentsAddressTables.cs
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -72,7 +68,6 @@ namespace StudentApp.Migrations
                         column: x => x.StudentsId,
                         principalTable: "Student",
                         principalColumn: "StudentId");
-<<<<<<<< HEAD:StudentApp/Migrations/20230331221758_UpdateStudentsTables.cs
                 });
 
             migrationBuilder.CreateTable(
@@ -93,8 +88,6 @@ namespace StudentApp.Migrations
                         column: x => x.StudentsId,
                         principalTable: "Student",
                         principalColumn: "StudentId");
-========
->>>>>>>> StudentAppAzureADAutht:StudentApp/Migrations/20230308211741_UpdateStudentsAddressTables.cs
                 });
 
             migrationBuilder.CreateTable(

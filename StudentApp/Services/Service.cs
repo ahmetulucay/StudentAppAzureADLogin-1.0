@@ -18,4 +18,9 @@ public class Service : IService
     public async Task<Students> AddStudent(Students students) => await _repo.AddStudent(students);
     public async Task<Students> UpdateStudent(int id, Students students) => await _repo.UpdateStudent(id, students);
     public async Task<bool?> DeleteStudent(int id) => await _repo.DeleteStudent(id);
+
+    //public Task UpdateStudent(object id, Students studentDB)
+    //{
+    //    throw new NotImplementedException();
+    //}
 }

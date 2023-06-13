@@ -8,6 +8,7 @@ using StudentApp.Models;
 using StudentApp.Services;
 using System;
 using AddStudentRequest = StudentApp.Models.AddStudentRequest;
+using UpdateStudentRequest = StudentApp.Models.UpdateStudentRequest;
 
 namespace StudentApp.GrpcService;
 
@@ -71,7 +72,8 @@ public class MessageGrpcService : GrpcMessage.Message.MessageBase
     public override async Task<AddStudentResponse> AddStudent(GrpcMessage.AddStudentRequest request, ServerCallContext context)
     {
         var requestDB = new AddStudentRequest();
-        
+        var phoneList = new List<PhoneStudentRequest>();
+        //request.PhoneNumber.Select(pn => phoneList.Add(new PhoneStudentRequest(PhoneNumber));
         var student = new AddStudentRequest
         {
             UserName = request.UserName,
@@ -100,6 +102,60 @@ public class MessageGrpcService : GrpcMessage.Message.MessageBase
             return new AddStudentResponse();
         }
     }
+
+    public override async Task<UpdateStudentResponse> UpdateStudent(GrpcMessage.UpdateStudentRequest request, ServerCallContext context)
+    {
+        var requestDB = new UpdateStudentRequest();
+
+        var student = new UpdateStudentRequest
+        {
+            UserName = request.UserName,
+            FirstName = request.FirstName,
+            SecondName = request.SecondName,
+            LastName = request.LastName,
+            School = request.School,
+            RegistrationDate = DateTime.UtcNow,
+            PhoneStudent = new List<PhoneStudentRequest>(),
+            AddressStudent = new List<AddressStudentRequest>(),
+            ImageStudent = new List<ImageStudentRequest>(),
+            EmailAddressStudent = new List<EmailAddressStudentRequest>()
+        };
+
+        var studentDB = requestDB.ToUpdateStudent(student);
+
+        var result = await _service.UpdateStudent((int)request.Id, studentDB);
+        if (result == null)
+        {
+            _logger.LogWarning("Wrong student data");
+            return new UpdateStudentResponse();
+        }
+        else
+        {
+            _logger.LogInformation("Student updated in the database");
+            return new UpdateStudentResponse();
+        }
+    }
+
+    public override async Task<DeleteStudentResponse> DeleteStudent (GrpcMessage.DeleteStudentRequest request, ServerCallContext context)
+    {
+        var result = await _service.DeleteStudent((int)request.Id);
+        if (result == null)
+        {
+            _logger.LogWarning($"Wrong student id:{request.Id}.");
+            return new DeleteStudentResponse();
+        }
+        if (result == false)
+        {
+            _logger.LogError($"Deleting student id:{request.Id} is NOT successful");
+            return new DeleteStudentResponse();
+        }
+        _logger.LogInformation($"True: Deleting Id {request.Id} is successful");
+        return new DeleteStudentResponse();
+    }
+
+
+
+
 
     public override async Task GetAllMessages(GrpcMessage.GetAllMessagesRequest request, IServerStreamWriter<GrpcMessage.GetAllMessagesResponse> responseStream, ServerCallContext context)
     {
