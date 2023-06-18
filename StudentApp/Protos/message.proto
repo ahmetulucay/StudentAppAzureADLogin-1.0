@@ -26,6 +26,7 @@ message GetAllStudentsResponse
     string SecondName = 4;
     string LastName = 5;
     string School = 6;
+    repeated PhoneNo PhoneNumber = 7;
 }
 
 message GetStudentRequest 

@@ -24,7 +24,6 @@ public class MessageGrpcService : GrpcMessage.Message.MessageBase
 
     public override async Task GetAllStudents(GrpcMessage.GetAllStudentsRequest request, IServerStreamWriter<GrpcMessage.GetAllStudentsResponse> responseStream, ServerCallContext context)
     {
-        var students = new List<StudentResponse>();
         var result = await _service.Get();
         if (result is null)
         {
@@ -53,7 +52,7 @@ public class MessageGrpcService : GrpcMessage.Message.MessageBase
         var result = await _service.GetAsId((int)request.Id);
         if (result == null)
         {
-            _logger.LogWarning($"Wrong student id:{result.StudentId}.");
+            _logger.LogWarning($"Wrong student id:{request.Id}.");
         }
         else
         {
@@ -73,7 +72,19 @@ public class MessageGrpcService : GrpcMessage.Message.MessageBase
     {
         var requestDB = new AddStudentRequest();
         var phoneList = new List<PhoneStudentRequest>();
-        //request.PhoneNumber.Select(pn => phoneList.Add(new PhoneStudentRequest(PhoneNumber));
+        var grpcPhones = request.PhoneNumber;
+
+        for (var i = 0; i < grpcPhones.Count; i++)
+        {
+            phoneList.Add(new PhoneStudentRequest(
+                new StudentPhoneNo 
+                {
+                    PhoneNo = grpcPhones[i].PhoneNumber,
+                }));
+        }
+
+        _logger.LogInformation("1");
+
         var student = new AddStudentRequest
         {
             UserName = request.UserName,
@@ -82,15 +93,18 @@ public class MessageGrpcService : GrpcMessage.Message.MessageBase
             LastName = request.LastName,
             School = request.School,
             RegistrationDate = DateTime.UtcNow,
-            PhoneStudent = new List<PhoneStudentRequest>(),
+            PhoneStudent = phoneList,
             AddressStudent = new List<AddressStudentRequest>(),
             ImageStudent   = new List<ImageStudentRequest>(),
             EmailAddressStudent = new List<EmailAddressStudentRequest>()
         };
 
+        _logger.LogInformation("2");
         var studentDB = requestDB.ToStudent(student);
+        _logger.LogInformation("3");
 
         var result = await _service.AddStudent(studentDB);
+        _logger.LogInformation("4");
         if (result == null)
         {
             _logger.LogWarning("Wrong student data");
