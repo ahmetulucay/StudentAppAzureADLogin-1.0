@@ -25,6 +25,8 @@ public class MessageGrpcService : GrpcMessage.Message.MessageBase
     public override async Task GetAllStudents(GrpcMessage.GetAllStudentsRequest request, IServerStreamWriter<GrpcMessage.GetAllStudentsResponse> responseStream, ServerCallContext context)
     {
         var result = await _service.Get();
+        var phoneList = new List<PhoneStudentRequest>();
+
         if (result is null)
         {
             _logger.LogDebug("Students data not retrieved from the service.");
@@ -34,16 +36,20 @@ public class MessageGrpcService : GrpcMessage.Message.MessageBase
         {
             for (var i = 0; i < result.Count; i++)
             {
-                await responseStream.WriteAsync(new GrpcMessage.GetAllStudentsResponse { 
+                await responseStream.WriteAsync(new GrpcMessage.GetAllStudentsResponse 
+                {
                     Id = result[i].StudentId,
                     FirstName = result[i].FirstName,
-                    SecondName = result[i].LastName,
+                    SecondName = result[i].SecondName,
                     LastName = result[i].LastName,
                     UserName = result[i].UserName,
-                    School  = result[i].School
+                    School = result[i].School
+                    //for (var j = 0; j < result.Count; j++)
+                    //{
+                    //phoneList.Add(new PhoneStudentRequest(result));
+                    //}
                 });
             }
-
         }
     }
 
@@ -170,7 +176,7 @@ public class MessageGrpcService : GrpcMessage.Message.MessageBase
 
 
 
-
+    //Ex-Grpc Messages
     public override async Task GetAllMessages(GrpcMessage.GetAllMessagesRequest request, IServerStreamWriter<GrpcMessage.GetAllMessagesResponse> responseStream, ServerCallContext context)
     {
         for (var i = 0; i < 10; i++)
