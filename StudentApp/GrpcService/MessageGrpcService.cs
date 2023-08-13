@@ -1,12 +1,9 @@
-﻿
-using Azure;
+﻿using Azure;
 using Grpc.Core;
 using GrpcMessage;
-using LanguageExt.Common;
-using Nest;
+using LanguageExt;
 using StudentApp.Models;
 using StudentApp.Services;
-using System;
 using AddStudentRequest = StudentApp.Models.AddStudentRequest;
 using UpdateStudentRequest = StudentApp.Models.UpdateStudentRequest;
 
@@ -25,7 +22,6 @@ public class MessageGrpcService : GrpcMessage.Message.MessageBase
     public override async Task GetAllStudents(GrpcMessage.GetAllStudentsRequest request, IServerStreamWriter<GrpcMessage.GetAllStudentsResponse> responseStream, ServerCallContext context)
     {
         var result = await _service.Get();
-        var phoneList = new List<PhoneStudentRequest>();
 
         if (result is null)
         {
@@ -36,7 +32,7 @@ public class MessageGrpcService : GrpcMessage.Message.MessageBase
         {
             for (var i = 0; i < result.Count; i++)
             {
-                await responseStream.WriteAsync(new GrpcMessage.GetAllStudentsResponse 
+                var response = new GrpcMessage.GetAllStudentsResponse
                 {
                     Id = result[i].StudentId,
                     FirstName = result[i].FirstName,
@@ -44,11 +40,33 @@ public class MessageGrpcService : GrpcMessage.Message.MessageBase
                     LastName = result[i].LastName,
                     UserName = result[i].UserName,
                     School = result[i].School
-                    //for (var j = 0; j < result.Count; j++)
-                    //{
-                    //phoneList.Add(new PhoneStudentRequest(result));
-                    //}
+                };
+                result[i].PhoneStudent.ToList().ForEach(ps =>
+                {
+                    var phone = ps.PhoneNo;
+                    if (phone is not null)
+                        response.PhoneNumber.Add(new PhoneNo() { PhoneNumber = phone ?? string.Empty });
                 });
+                result[i].EmailAddressStudent.ToList().ForEach(ea =>
+                {
+                    var emailAddress = ea.EmailAddress;
+                    if (emailAddress is not null)
+                        response.EmailAddress.Add(new Email() { EmailAddress = emailAddress ?? string.Empty });
+                });
+                result[i].AddressStudent.ToList().ForEach(ast =>
+                {
+                    var addressStudent = ast.Address;
+                    if (addressStudent is not null)
+                        response.StudentAddress.Add(new Address() { StudentAddress = addressStudent ?? string.Empty});
+                });
+                result[i].ImageStudent.ToList().ForEach(ist =>
+                {
+                    var imageStudent = ist.ImageName;
+                    if (imageStudent is not null)
+                        response.StudentImage.Add(new Image() { StudentImage = imageStudent ?? string.Empty });
+                });
+
+                await responseStream.WriteAsync(response);
             }
         }
     }
@@ -62,7 +80,7 @@ public class MessageGrpcService : GrpcMessage.Message.MessageBase
         }
         else
         {
-            await responseStream.WriteAsync(new GrpcMessage.GetStudentResponse
+            var response = new GrpcMessage.GetStudentResponse
             {
                 Id = result.StudentId,
                 FirstName = result.FirstName,
@@ -70,7 +88,33 @@ public class MessageGrpcService : GrpcMessage.Message.MessageBase
                 LastName = result.LastName,
                 UserName = result.UserName,
                 School = result.School
+            };
+            result.PhoneStudent.ToList().ForEach(ps =>
+            {
+                var phone = ps.PhoneNo;
+                if (phone is not null)
+                    response.PhoneNumber.Add(new PhoneNo() { PhoneNumber = phone ?? string.Empty });
             });
+            result.EmailAddressStudent.ToList().ForEach(ea =>
+            {
+                var emailAddress = ea.EmailAddress;
+                if (emailAddress is not null)
+                    response.EmailAddress.Add(new Email() { EmailAddress = emailAddress ?? string.Empty });
+            });
+            result.AddressStudent.ToList().ForEach(ast =>
+            {
+                var addressStudent = ast.Address;
+                if (addressStudent is not null)
+                    response.StudentAddress.Add(new Address() { StudentAddress = addressStudent ?? string.Empty });
+            });
+            result.ImageStudent.ToList().ForEach(ist =>
+            {
+                var imageStudent = ist.ImageName;
+                if (imageStudent is not null)
+                    response.StudentImage.Add(new Image() { StudentImage = imageStudent ?? string.Empty });
+            });
+
+            await responseStream.WriteAsync(response);
         }
     }
 
@@ -108,7 +152,6 @@ public class MessageGrpcService : GrpcMessage.Message.MessageBase
         _logger.LogInformation("2");
         var studentDB = requestDB.ToStudent(student);
         _logger.LogInformation("3");
-
         var result = await _service.AddStudent(studentDB);
         _logger.LogInformation("4");
         if (result == null)
@@ -172,9 +215,6 @@ public class MessageGrpcService : GrpcMessage.Message.MessageBase
         _logger.LogInformation($"True: Deleting Id {request.Id} is successful");
         return new DeleteStudentResponse();
     }
-
-
-
 
     //Ex-Grpc Messages
     public override async Task GetAllMessages(GrpcMessage.GetAllMessagesRequest request, IServerStreamWriter<GrpcMessage.GetAllMessagesResponse> responseStream, ServerCallContext context)

@@ -6,15 +6,14 @@ package message;
 
 service Message {
   rpc GetAllStudents (GetAllStudentsRequest) returns (stream GetAllStudentsResponse);
-  rpc GetStudent (GetStudentRequest) returns (stream GetStudentResponse);
-  rpc AddStudent (AddStudentRequest) returns (AddStudentResponse);
-  rpc UpdateStudent (UpdateStudentRequest) returns (UpdateStudentResponse);
-  rpc DeleteStudent (DeleteStudentRequest) returns (DeleteStudentResponse);
+  rpc GetStudent (GetStudentRequest)         returns (stream GetStudentResponse);
+  rpc AddStudent (AddStudentRequest)         returns (AddStudentResponse);
+  rpc UpdateStudent (UpdateStudentRequest)   returns (UpdateStudentResponse);
+  rpc DeleteStudent (DeleteStudentRequest)   returns (DeleteStudentResponse);
 
-
-  rpc GetMessage (GetMessageRequest) returns (GetMessageResponse);
-  rpc SendMessage (SendMessageRequest) returns (SendMessageResponse);
-  rpc GetAllMessages(GetAllMessagesRequest) returns (stream GetAllMessagesResponse);
+  rpc GetMessage (GetMessageRequest)         returns (GetMessageResponse);
+  rpc SendMessage (SendMessageRequest)       returns (SendMessageResponse);
+  rpc GetAllMessages(GetAllMessagesRequest)  returns (stream GetAllMessagesResponse);
 }
 
 message GetAllStudentsRequest {}
@@ -27,12 +26,16 @@ message GetAllStudentsResponse
     string LastName = 5;
     string School = 6;
     repeated PhoneNo PhoneNumber = 7;
+    repeated Email EmailAddress = 8;
+    repeated Address StudentAddress = 9;
+    repeated Image StudentImage = 10;
 }
 
 message GetStudentRequest 
 {
     int64 id = 1;
 }
+
 message GetStudentResponse{
     int64 id = 1;
     string UserName = 2;
@@ -40,6 +43,10 @@ message GetStudentResponse{
     string SecondName = 4;
     string LastName = 5;
     string School = 6;
+    repeated PhoneNo PhoneNumber = 7;
+    repeated Email EmailAddress = 8;
+    repeated Address StudentAddress = 9;
+    repeated Image StudentImage = 10;
 }
 
 message AddStudentRequest 
@@ -51,13 +58,11 @@ message AddStudentRequest
     string LastName = 5;
     string School = 6;
     repeated PhoneNo PhoneNumber = 7;
+    repeated Email EmailAddress = 8;
+    repeated Address StudentAddress = 9;
+    repeated Image StudentImage = 10;
 }
 message AddStudentResponse{}
-
-message PhoneNo
-{
-    string PhoneNumber = 1;
-}
 
 message UpdateStudentRequest 
 {
@@ -67,6 +72,10 @@ message UpdateStudentRequest
     string SecondName = 4;
     string LastName = 5;
     string School = 6;
+    repeated PhoneNo PhoneNumber = 7;
+    repeated Email EmailAddress = 8;
+    repeated Address StudentAddress = 9;
+    repeated Image StudentImage = 10;
 }
 message UpdateStudentResponse {}
 
@@ -74,8 +83,21 @@ message DeleteStudentRequest
 {
     int64 id = 1;
 }
+
 message DeleteStudentResponse{}
 
+
+message PhoneNo
+{string PhoneNumber = 1;}
+
+message Email
+{string EmailAddress = 1;}
+
+message Address
+{string StudentAddress = 1;}
+
+message Image
+{string StudentImage = 1;}
 
 
 message GetAllMessagesRequest {}
