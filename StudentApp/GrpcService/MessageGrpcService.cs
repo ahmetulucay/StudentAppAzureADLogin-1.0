@@ -1,8 +1,11 @@
-﻿
-using Azure;
+﻿using Azure;
 using Grpc.Core;
+using GrpcMessage;
+using LanguageExt;
 using StudentApp.Models;
 using StudentApp.Services;
+using AddStudentRequest = StudentApp.Models.AddStudentRequest;
+using UpdateStudentRequest = StudentApp.Models.UpdateStudentRequest;
 
 namespace StudentApp.GrpcService;
 
@@ -18,8 +21,8 @@ public class MessageGrpcService : GrpcMessage.Message.MessageBase
 
     public override async Task GetAllStudents(GrpcMessage.GetAllStudentsRequest request, IServerStreamWriter<GrpcMessage.GetAllStudentsResponse> responseStream, ServerCallContext context)
     {
-        var students = new List<StudentResponse>();
         var result = await _service.Get();
+
         if (result is null)
         {
             _logger.LogDebug("Students data not retrieved from the service.");
@@ -29,19 +32,191 @@ public class MessageGrpcService : GrpcMessage.Message.MessageBase
         {
             for (var i = 0; i < result.Count; i++)
             {
-                await responseStream.WriteAsync(new GrpcMessage.GetAllStudentsResponse { 
+                var response = new GrpcMessage.GetAllStudentsResponse
+                {
                     Id = result[i].StudentId,
                     FirstName = result[i].FirstName,
-                    SecondName = result[i].LastName,
+                    SecondName = result[i].SecondName,
                     LastName = result[i].LastName,
                     UserName = result[i].UserName,
-                    School  = result[i].School
+                    School = result[i].School
+                };
+                result[i].PhoneStudent.ToList().ForEach(ps =>
+                {
+                    var phone = ps.PhoneNo;
+                    if (phone is not null)
+                        response.PhoneNumber.Add(new PhoneNo() { PhoneNumber = phone ?? string.Empty });
                 });
-            }
+                result[i].EmailAddressStudent.ToList().ForEach(ea =>
+                {
+                    var emailAddress = ea.EmailAddress;
+                    if (emailAddress is not null)
+                        response.EmailAddress.Add(new Email() { EmailAddress = emailAddress ?? string.Empty });
+                });
+                result[i].AddressStudent.ToList().ForEach(ast =>
+                {
+                    var addressStudent = ast.Address;
+                    if (addressStudent is not null)
+                        response.StudentAddress.Add(new Address() { StudentAddress = addressStudent ?? string.Empty});
+                });
+                result[i].ImageStudent.ToList().ForEach(ist =>
+                {
+                    var imageStudent = ist.ImageName;
+                    if (imageStudent is not null)
+                        response.StudentImage.Add(new Image() { StudentImage = imageStudent ?? string.Empty });
+                });
 
+                await responseStream.WriteAsync(response);
+            }
         }
     }
 
+    public override async Task GetStudent(GrpcMessage.GetStudentRequest request, IServerStreamWriter<GrpcMessage.GetStudentResponse> responseStream, ServerCallContext context)
+    {
+        var result = await _service.GetAsId((int)request.Id);
+        if (result == null)
+        {
+            _logger.LogWarning($"Wrong student id:{request.Id}.");
+        }
+        else
+        {
+            var response = new GrpcMessage.GetStudentResponse
+            {
+                Id = result.StudentId,
+                FirstName = result.FirstName,
+                SecondName = result.LastName,
+                LastName = result.LastName,
+                UserName = result.UserName,
+                School = result.School
+            };
+            result.PhoneStudent.ToList().ForEach(ps =>
+            {
+                var phone = ps.PhoneNo;
+                if (phone is not null)
+                    response.PhoneNumber.Add(new PhoneNo() { PhoneNumber = phone ?? string.Empty });
+            });
+            result.EmailAddressStudent.ToList().ForEach(ea =>
+            {
+                var emailAddress = ea.EmailAddress;
+                if (emailAddress is not null)
+                    response.EmailAddress.Add(new Email() { EmailAddress = emailAddress ?? string.Empty });
+            });
+            result.AddressStudent.ToList().ForEach(ast =>
+            {
+                var addressStudent = ast.Address;
+                if (addressStudent is not null)
+                    response.StudentAddress.Add(new Address() { StudentAddress = addressStudent ?? string.Empty });
+            });
+            result.ImageStudent.ToList().ForEach(ist =>
+            {
+                var imageStudent = ist.ImageName;
+                if (imageStudent is not null)
+                    response.StudentImage.Add(new Image() { StudentImage = imageStudent ?? string.Empty });
+            });
+
+            await responseStream.WriteAsync(response);
+        }
+    }
+
+    public override async Task<AddStudentResponse> AddStudent(GrpcMessage.AddStudentRequest request, ServerCallContext context)
+    {
+        var requestDB = new AddStudentRequest();
+        var phoneList = new List<PhoneStudentRequest>();
+        var grpcPhones = request.PhoneNumber;
+
+        for (var i = 0; i < grpcPhones.Count; i++)
+        {
+            phoneList.Add(new PhoneStudentRequest(
+                new StudentPhoneNo 
+                {
+                    PhoneNo = grpcPhones[i].PhoneNumber,
+                }));
+        }
+
+        _logger.LogInformation("1");
+
+        var student = new AddStudentRequest
+        {
+            UserName = request.UserName,
+            FirstName = request.FirstName, 
+            SecondName = request.SecondName,
+            LastName = request.LastName,
+            School = request.School,
+            RegistrationDate = DateTime.UtcNow,
+            PhoneStudent = phoneList,
+            AddressStudent = new List<AddressStudentRequest>(),
+            ImageStudent   = new List<ImageStudentRequest>(),
+            EmailAddressStudent = new List<EmailAddressStudentRequest>()
+        };
+
+        _logger.LogInformation("2");
+        var studentDB = requestDB.ToStudent(student);
+        _logger.LogInformation("3");
+        var result = await _service.AddStudent(studentDB);
+        _logger.LogInformation("4");
+        if (result == null)
+        {
+            _logger.LogWarning("Wrong student data");
+            return new AddStudentResponse();
+        }
+        else
+        {
+            _logger.LogInformation("Student added in the database");
+            return new AddStudentResponse();
+        }
+    }
+
+    public override async Task<UpdateStudentResponse> UpdateStudent(GrpcMessage.UpdateStudentRequest request, ServerCallContext context)
+    {
+        var requestDB = new UpdateStudentRequest();
+
+        var student = new UpdateStudentRequest
+        {
+            UserName = request.UserName,
+            FirstName = request.FirstName,
+            SecondName = request.SecondName,
+            LastName = request.LastName,
+            School = request.School,
+            RegistrationDate = DateTime.UtcNow,
+            PhoneStudent = new List<PhoneStudentRequest>(),
+            AddressStudent = new List<AddressStudentRequest>(),
+            ImageStudent = new List<ImageStudentRequest>(),
+            EmailAddressStudent = new List<EmailAddressStudentRequest>()
+        };
+
+        var studentDB = requestDB.ToUpdateStudent(student);
+
+        var result = await _service.UpdateStudent((int)request.Id, studentDB);
+        if (result == null)
+        {
+            _logger.LogWarning("Wrong student data");
+            return new UpdateStudentResponse();
+        }
+        else
+        {
+            _logger.LogInformation("Student updated in the database");
+            return new UpdateStudentResponse();
+        }
+    }
+
+    public override async Task<DeleteStudentResponse> DeleteStudent (GrpcMessage.DeleteStudentRequest request, ServerCallContext context)
+    {
+        var result = await _service.DeleteStudent((int)request.Id);
+        if (result == null)
+        {
+            _logger.LogWarning($"Wrong student id:{request.Id}.");
+            return new DeleteStudentResponse();
+        }
+        if (result == false)
+        {
+            _logger.LogError($"Deleting student id:{request.Id} is NOT successful");
+            return new DeleteStudentResponse();
+        }
+        _logger.LogInformation($"True: Deleting Id {request.Id} is successful");
+        return new DeleteStudentResponse();
+    }
+
+    //Ex-Grpc Messages
     public override async Task GetAllMessages(GrpcMessage.GetAllMessagesRequest request, IServerStreamWriter<GrpcMessage.GetAllMessagesResponse> responseStream, ServerCallContext context)
     {
         for (var i = 0; i < 10; i++)
